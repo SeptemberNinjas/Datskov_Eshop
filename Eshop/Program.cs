@@ -1,4 +1,5 @@
-﻿using Eshop.ConsoleCommands;
+﻿using Eshop.Menu;
+using Eshop.Menu.Commands;
 using System.Reflection;
 using System.Reflection.Metadata;
 
@@ -8,29 +9,13 @@ namespace Eshop
     {
         static void Main(string[] args)
         {
-            while (true)
-            {
-                var Menu = MainMenu();
-                foreach (var KeyValue in Menu)
-                {
-                    Console.WriteLine(KeyValue.Key + ". " + KeyValue.Value.Name);
-                }
-                Menu[0].Execute();
+            var mainMenuCommands = new Dictionary<int, IMenuCommand>();
+            mainMenuCommands.Add(1, new ShowCatalogCommand());
+            mainMenuCommands.Add(0, new ExitCommand());
 
-                Console.ReadLine();
-            }
+            MenuPage MainMenu = new MenuPage(null, mainMenuCommands);
+            MainMenu.DrawPage();
+            MainMenu.ActionProcessing();
         }
-
-        internal static Dictionary<int, IConsoleCommand> MainMenu()
-        {
-            var Commands = new Dictionary<int, IConsoleCommand>();
-            Commands.Add(1, new ShowCatalogCommand());
-            Commands.Add(0, new ExitCommand());
-
-            return Commands;
-        }
-
-
-
     }
 }
