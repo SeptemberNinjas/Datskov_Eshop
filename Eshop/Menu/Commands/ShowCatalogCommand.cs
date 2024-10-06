@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,18 +7,16 @@ using System.Threading.Tasks;
 
 namespace Eshop.Menu.Commands
 {
-    internal class ShowCatalogCommand : IMenuCommand
+    internal class ShowCatalogCommand(ProductType productType) : IMenuCommand
     {
-        public string? Description { get; } = "Show catalog";
+        public string? Description { get; } = productType.ToString();
 
-        public void Execute(MenuPage CurrentPage)
+        void IMenuCommand.Execute(MenuPage CurrentPage)
         {
-            var CatalogCommands = new Dictionary<int, IMenuCommand>();
-            CatalogCommands.Add(0, new BackCommand());
-            
-            MenuPage Catalog = new MenuPage(CurrentPage, CatalogCommands);
-            Catalog.DrawPage();
-            Catalog.ActionProcessing();
+            var CatalogCommands = new Dictionary<int, IMenuCommand> { };
+
+            CatalogPage Catalog = new(CurrentPage, CatalogCommands);
+            Catalog.Show();
         }
     }
 }

@@ -9,13 +9,14 @@ namespace Eshop
     {
         static void Main(string[] args)
         {
-            var mainMenuCommands = new Dictionary<int, IMenuCommand>();
-            mainMenuCommands.Add(1, new ShowCatalogCommand());
-            mainMenuCommands.Add(0, new ExitCommand());
+            var mainMenuCommands = new Dictionary<int, IMenuCommand>
+            {
+                { 1, new ShowCatalogChoiceCommand() },
+                { 0, new ExitCommand() }
+            };
 
-            MenuPage MainMenu = new MenuPage(null, mainMenuCommands);
-            MainMenu.DrawPage();
-            MainMenu.ActionProcessing();
+            MenuPage MainMenu = new(null, mainMenuCommands);
+            MainMenu.Show();
         }
     }
 }

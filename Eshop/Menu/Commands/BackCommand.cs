@@ -15,8 +15,7 @@ namespace Eshop.Menu.Commands
             MenuPage? previosPage = CurrentPage.PreviosPage;
             if (previosPage != null)
             {
-                previosPage.DrawPage();
-                previosPage.ActionProcessing();
+                previosPage.Show();
             }
         }
     }

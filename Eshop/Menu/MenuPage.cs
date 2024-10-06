@@ -13,23 +13,28 @@ namespace Eshop.Menu
         public MenuPage? PreviosPage { get; } = previosPage;
         private readonly Dictionary<int, IMenuCommand> commands = commands;
 
-        public void DrawPage()
+        public virtual void DrawPage()
         {
             Console.Clear();
+            DrawCommandInterface();
+        }
 
+        public void DrawCommandInterface()
+        {
             foreach (var KeyValue in this.commands)
                 Console.WriteLine("" + KeyValue.Key + ": " + KeyValue.Value.Description);
             Console.Write("Select action:");
         }
-        public void ActionProcessing()
+        public void Show()
         {
             IMenuCommand? selectedCommand;
-            string? answer;
+            string? answer = null;
+
             do
             {
-                DrawPage();
+                this.DrawPage();
                 answer = Console.ReadLine();
-            } 
+            }
             while (!int.TryParse(answer, out int selectedAction) || !commands.TryGetValue(selectedAction, out selectedCommand));
 
             selectedCommand.Execute(this);
