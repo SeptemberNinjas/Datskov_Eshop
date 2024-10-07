@@ -23,12 +23,12 @@ namespace Eshop.Menu
         {
             foreach (var KeyValue in this.commands)
                 Console.WriteLine("" + KeyValue.Key + ": " + KeyValue.Value.Description);
-            Console.Write("Select action:");
+            Console.Write("Select action: ");
         }
         public void Show()
         {
             IMenuCommand? selectedCommand;
-            string? answer = null;
+            string? answer;
 
             do
             {

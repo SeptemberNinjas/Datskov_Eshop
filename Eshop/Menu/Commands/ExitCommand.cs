@@ -11,9 +11,6 @@ namespace Eshop.Menu.Commands
     {
         string? IMenuCommand.Description { get;  } = "Exit";
 
-        public void Execute(MenuPage CurrentPage)
-        {
-            Environment.Exit(0);
-        }
+        public void Execute(MenuPage CurrentPage) => Environment.Exit(0);
     }
 }

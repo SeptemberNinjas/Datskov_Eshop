@@ -13,10 +13,7 @@ namespace Eshop.Menu.Commands
         public void Execute(MenuPage CurrentPage)
         {
             MenuPage? previosPage = CurrentPage.PreviosPage;
-            if (previosPage != null)
-            {
-                previosPage.Show();
-            }
+            previosPage?.Show();
         }
     }
 }

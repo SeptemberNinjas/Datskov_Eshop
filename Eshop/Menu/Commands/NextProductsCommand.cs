@@ -12,9 +12,10 @@ namespace Eshop.Menu.Commands
 
         public void Execute(MenuPage CurrentPage)
         {
-            //(CatalogPage)CurrentPage = CurrentPage;
+            var _catPage = (CatalogPage)CurrentPage;
+            _catPage.PageNum++;
 
-            //(CatalogPage)CurrentPage;
+            CurrentPage.Show();
         }
     }
 }

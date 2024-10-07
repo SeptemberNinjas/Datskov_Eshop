@@ -10,6 +10,6 @@ namespace Eshop.Menu.Commands
     {
         string? Description { get; }
 
-        void Execute(MenuPage CurrentPage);
+        abstract void Execute(MenuPage CurrentPage);
     }
 }

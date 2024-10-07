@@ -3,27 +3,41 @@ using Core;
 
 namespace Eshop.Menu
 {
-    internal class CatalogPage(MenuPage? previosPage, Dictionary<int, IMenuCommand> commands, int PageNum = 0) : MenuPage(previosPage, commands)
+    internal class CatalogPage(MenuPage? previosPage, Dictionary<int, IMenuCommand> commands, Type productType, int PageNum = 1) : MenuPage(previosPage, commands)
     {
         static public int ProdQty { get; set; } = 5;
         public int PageNum { get; set; } = PageNum;
-        Product[] Products = [];
+        IGoods[] Products = [];
         
         public override void DrawPage()
         {
-            commands.Add(1, new PreviosProductsCommand());
-            commands.Add(2, new NextProductsCommand());
-            commands.Add(9, new SetQtyDisplayedCommand());
-            commands.Add(0, new BackCommand());
-
-            Products
-
-
-
             Console.Clear();
+
+            if (productType == typeof(Product))
+                Products = Product.Get();
+            else
+                Products = Service.Get();
+
+            var firstIndex = ProdQty * (PageNum - 1);
+
+            DrawCatalogHeader();
+            for (int i = firstIndex; i < Products.Length && i < firstIndex + ProdQty; i++) 
+                DrawProductDescription(Products[i]);
             
-            Console.WriteLine("Content");
             DrawCommandInterface();
+        }
+
+        private static void DrawCatalogHeader()
+        {
+            Console.WriteLine("+------+----------------------------------------------------------------------------------");
+            Console.WriteLine("|  ID  | Name / Description");
+            Console.WriteLine("+------+----------------------------------------------------------------------------------");
+        }
+
+        private static void DrawProductDescription(IGoods goods)
+        {
+            Console.WriteLine("| {0}    | {1} / {2}", goods.Id, goods.Name, goods.Description);
+            Console.WriteLine("+------+----------------------------------------------------------------------------------");
         }
     }
 }

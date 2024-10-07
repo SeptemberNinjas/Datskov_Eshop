@@ -15,8 +15,8 @@ namespace Eshop.Menu.Commands
         {
             var CatalogCommands = new Dictionary<int, IMenuCommand>
             {
-                { 1, new ShowCatalogCommand(ProductType.Product) },
-                { 2, new ShowCatalogCommand(ProductType.Service) },
+                { 1, new ShowCatalogCommand(typeof(Product)) },
+                { 2, new ShowCatalogCommand(typeof(Service)) },
                 { 0, new BackCommand() }
             };
             
