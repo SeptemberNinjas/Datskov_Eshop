@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Eshop.Menu.Commands
+﻿namespace Eshop.Menu.Commands
 {
     internal class BackCommand : IMenuCommand
     {
-        public string? Description { get;  } = "Back";
+        public string Description { get; } = "Back";
 
-        public void Execute(MenuPage CurrentPage)
+        public void Execute(MenuPage currentPage)
         {
-            MenuPage? previosPage = CurrentPage.PreviosPage;
+            MenuPage? previosPage = currentPage.PreviosPage;
             previosPage?.Show();
         }
     }

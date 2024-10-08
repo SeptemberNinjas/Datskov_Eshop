@@ -1,29 +1,45 @@
-﻿using Eshop.Menu.Commands;
-using Core;
+﻿using Eshop.Core;
+using Eshop.Menu.Commands;
 
 namespace Eshop.Menu
 {
-    internal class CatalogPage(MenuPage? previosPage, Dictionary<int, IMenuCommand> commands, Type productType, int PageNum = 1) : MenuPage(previosPage, commands)
+    internal class CatalogPage(MenuPage? previosPage, Dictionary<int, IMenuCommand> commands) : MenuPage(previosPage, commands)
     {
-        static public int ProdQty { get; set; } = 5;
-        public int PageNum { get; set; } = PageNum;
-        IGoods[] Products = [];
+        public static int ProdQty { get; set; } = 5;
+        public int PageNum { get; set; }
         
+        private readonly string _title = string.Empty;
+
+        private readonly Product[] _goods = [];
+
+        public CatalogPage(MenuPage? previosPage, Dictionary<int, IMenuCommand> commands, Type productType, int pageNum = 1) : this(previosPage, commands)
+        {
+            PageNum = pageNum;
+
+            if (productType == typeof(Product))
+            {
+                _goods = ApplicationContext.GetProducts();
+                _title = "--// Products //--";
+            }
+            else
+            {
+                _goods = ApplicationContext.GetServices();
+                _title = "--// Services //--";
+            }
+        }
+
         public override void DrawPage()
         {
             Console.Clear();
 
-            if (productType == typeof(Product))
-                Products = Product.Get();
-            else
-                Products = Service.Get();
+            Console.WriteLine(_title);
 
             var firstIndex = ProdQty * (PageNum - 1);
 
             DrawCatalogHeader();
-            for (int i = firstIndex; i < Products.Length && i < firstIndex + ProdQty; i++) 
-                DrawProductDescription(Products[i]);
-            
+            for (int i = firstIndex; i < _goods.Length && i < firstIndex + ProdQty; i++)
+                DrawProductDescription(_goods[i]);
+
             DrawCommandInterface();
         }
 
@@ -34,7 +50,7 @@ namespace Eshop.Menu
             Console.WriteLine("+------+----------------------------------------------------------------------------------");
         }
 
-        private static void DrawProductDescription(IGoods goods)
+        private static void DrawProductDescription(Product goods)
         {
             Console.WriteLine("| {0}    | {1} / {2}", goods.Id, goods.Name, goods.Description);
             Console.WriteLine("+------+----------------------------------------------------------------------------------");

@@ -1,26 +1,20 @@
-﻿using Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Eshop.Core;
 
 namespace Eshop.Menu.Commands
 {
     internal class ShowCatalogChoiceCommand : IMenuCommand
     {
-        public string? Description { get; } = "Show catalog";
-
-        public void Execute(MenuPage CurrentPage)
-        {
-            var CatalogCommands = new Dictionary<int, IMenuCommand>
+        public string Description { get; } = "Show catalog";
+        private readonly Dictionary<int, IMenuCommand> _catCommands = new()
             {
                 { 1, new ShowCatalogCommand(typeof(Product)) },
                 { 2, new ShowCatalogCommand(typeof(Service)) },
                 { 0, new BackCommand() }
             };
-            
-            MenuPage Catalog = new(CurrentPage, CatalogCommands);
+
+        public void Execute(MenuPage currentPage)
+        {
+            MenuPage Catalog = new(currentPage, _catCommands);
             Catalog.Show();
         }
     }

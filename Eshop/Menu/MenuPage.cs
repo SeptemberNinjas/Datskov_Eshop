@@ -1,17 +1,11 @@
 ﻿using Eshop.Menu.Commands;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Eshop.Menu
 {
     internal class MenuPage(MenuPage? previosPage, Dictionary<int, IMenuCommand> commands)
     {
         public MenuPage? PreviosPage { get; } = previosPage;
-        private readonly Dictionary<int, IMenuCommand> commands = commands;
+        private readonly Dictionary<int, IMenuCommand> _commands = commands;
 
         public virtual void DrawPage()
         {
@@ -21,7 +15,7 @@ namespace Eshop.Menu
 
         public void DrawCommandInterface()
         {
-            foreach (var KeyValue in this.commands)
+            foreach (var KeyValue in _commands)
                 Console.WriteLine("" + KeyValue.Key + ": " + KeyValue.Value.Description);
             Console.Write("Select action: ");
         }
@@ -32,10 +26,10 @@ namespace Eshop.Menu
 
             do
             {
-                this.DrawPage();
+                DrawPage();
                 answer = Console.ReadLine();
             }
-            while (!int.TryParse(answer, out int selectedAction) || !commands.TryGetValue(selectedAction, out selectedCommand));
+            while (!int.TryParse(answer, out int selectedAction) || !_commands.TryGetValue(selectedAction, out selectedCommand));
 
             selectedCommand.Execute(this);
         }

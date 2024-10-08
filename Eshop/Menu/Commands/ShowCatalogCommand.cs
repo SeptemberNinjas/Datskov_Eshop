@@ -1,19 +1,12 @@
-﻿using Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Eshop.Core;
 
 namespace Eshop.Menu.Commands
 {
     internal class ShowCatalogCommand(Type productType) : IMenuCommand
     {
-        public string? Description { get; } = productType == typeof(Product) ? "Products" : "Services";
-
-        void IMenuCommand.Execute(MenuPage CurrentPage)
-        {
-            var CatalogCommands = new Dictionary<int, IMenuCommand> 
+        public string Description { get; } = productType == typeof(Product) ? "Products" : "Services";
+        
+        private readonly Dictionary<int, IMenuCommand> _catCommands = new()
             {
                 { 1, new PreviosProductsCommand() },
                 { 2, new NextProductsCommand() },
@@ -21,7 +14,9 @@ namespace Eshop.Menu.Commands
                 { 0, new BackCommand() }
             };
 
-            CatalogPage Catalog = new(CurrentPage, CatalogCommands, productType);
+        public void Execute(MenuPage currentPage)
+        {
+            CatalogPage Catalog = new(currentPage, _catCommands, productType);
             Catalog.Show();
         }
     }

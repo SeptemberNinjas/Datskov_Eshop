@@ -1,21 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Eshop.Menu.Commands
+﻿namespace Eshop.Menu.Commands
 {
     class NextProductsCommand : IMenuCommand
     {
-        public string? Description { get; } = "Next page";
+        public string Description { get; } = "Next page";
 
-        public void Execute(MenuPage CurrentPage)
+        public void Execute(MenuPage currentPage)
         {
-            var _catPage = (CatalogPage)CurrentPage;
-            _catPage.PageNum++;
+            if (currentPage is CatalogPage catPage)
+                catPage.PageNum++;
 
-            CurrentPage.Show();
+            currentPage.Show();
         }
     }
 }

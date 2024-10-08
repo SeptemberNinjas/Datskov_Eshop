@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Eshop.Menu.Commands
+﻿namespace Eshop.Menu.Commands
 {
     internal class SetQtyDisplayedCommand : IMenuCommand
     {
-        public string? Description { get; } = "Set qty displayed";
+        public string Description { get; } = "Set qty displayed";
 
-        public void Execute(MenuPage CurrentPage)
+        public void Execute(MenuPage currentPage)
         {
             string? answer;
             int selectedQty;
@@ -23,7 +17,7 @@ namespace Eshop.Menu.Commands
             while (!int.TryParse(answer, out selectedQty) || selectedQty < 1 || selectedQty > 5);
 
             CatalogPage.ProdQty = selectedQty;
-            CurrentPage.Show();
+            currentPage.Show();
         }
     }
 }

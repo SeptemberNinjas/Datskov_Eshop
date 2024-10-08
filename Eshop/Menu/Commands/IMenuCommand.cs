@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Eshop.Menu.Commands
+﻿namespace Eshop.Menu.Commands
 {
     internal interface IMenuCommand
     {
-        string? Description { get; }
+        public string Description { get; }
 
-        abstract void Execute(MenuPage CurrentPage);
+        public void Execute(MenuPage currentPage);
     }
 }

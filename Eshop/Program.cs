@@ -1,7 +1,5 @@
 ﻿using Eshop.Menu;
 using Eshop.Menu.Commands;
-using System.Reflection;
-using System.Reflection.Metadata;
 
 namespace Eshop
 {
