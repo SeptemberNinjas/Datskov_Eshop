@@ -55,7 +55,7 @@ namespace Eshop.Menu
         private static void DrawCatalogHeader()
         {
             Console.WriteLine("+------+----------------------------------------------------------------------------------");
-            Console.WriteLine("|  ID  | Name / Description");
+            Console.WriteLine("|  ID / Price / Name / Description");
             Console.WriteLine("+------+----------------------------------------------------------------------------------");
         }
 
