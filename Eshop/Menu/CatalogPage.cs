@@ -61,12 +61,12 @@ namespace Eshop.Menu
 
         private static void DrawProductDescription(Product product)
         {
-            Console.WriteLine("| {0}    | {1} / {2}", product.Id, product.Name, product.Description);
+            Console.WriteLine("| {0} / {1} / {2} / {3}", product.Id, product.Price, product.Name, product.Description);
             Console.WriteLine("+------+----------------------------------------------------------------------------------");
         }
         private static void DrawServiceDescription(Service service)
         {
-            Console.WriteLine("| {0}    | {1} / {2}", service.Id, service.Name, service.Description);
+            Console.WriteLine("| {0} / {1} / {2} / {3}", service.Id, service.Price, service.Name, service.Description);
             Console.WriteLine("+------+----------------------------------------------------------------------------------");
         }
     }

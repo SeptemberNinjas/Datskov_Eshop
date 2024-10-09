@@ -1,6 +1,6 @@
 ﻿namespace Eshop.Core
 {
-    internal class Cart
+    public class Cart
     {
         private readonly List<CartItem> _items = [];
         public decimal TotalAmount
@@ -13,14 +13,16 @@
             }
         }
 
-        public string Add(Product product, uint count)
+        public string Add(Product? product, Service? service, uint count)
         {
-            CartItem? cartItem = _items.Find(value => value.Product == product);
-            cartItem ??= new(product);
 
-            if (product is Service)
-                cartItem.Count = 1;
-            else cartItem.Count = +count;
+
+            //CartItem? cartItem = _items.Find(value => value.Product == product);
+            //cartItem ??= new(product);
+
+            //if (product is Service)
+            //    cartItem.Count = 1;
+            //else cartItem.Count = +count;
 
             return "Product successfully added";
         }
