@@ -1,9 +1,10 @@
 ﻿namespace Eshop.Core
 {
-    class CartItem
+    public class CartItem
     {
-        public Product Product { get; }
-        public decimal Price { get => Product.Price; }
+        public Product? Product { get; }
+        public Service? Service { get; }
+        public decimal Price { get => Product != null ? Product.Price : Service != null ? Service.Price : 0; }
         public uint Count { get; set; }
         public decimal Amount { get => (decimal)Count * Price; }
 
@@ -11,6 +12,11 @@
         {
             Product = product;
             Count = count;
+        }
+        public CartItem(Service service)
+        {
+            Service = service;
+            Count = 1;
         }
     }
 }

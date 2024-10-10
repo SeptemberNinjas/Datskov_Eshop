@@ -1,8 +1,10 @@
-﻿namespace Eshop.Core
+﻿using System.Collections;
+
+namespace Eshop.Core
 {
-    public class Cart
+    public class Cart : IEnumerable
     {
-        private readonly List<CartItem> _items = [];
+        public List<CartItem> _items = [];
         public decimal TotalAmount
         {
             get
@@ -13,18 +15,37 @@
             }
         }
 
-        public string Add(Product? product, Service? service, uint count)
+        public string Add(Product product, uint count)
         {
-
-
-            //CartItem? cartItem = _items.Find(value => value.Product == product);
-            //cartItem ??= new(product);
-
-            //if (product is Service)
-            //    cartItem.Count = 1;
-            //else cartItem.Count = +count;
+            CartItem? cartItem = _items.Find(value => value.Product == product);
+            if (cartItem == null)
+            {
+                cartItem ??= new(product);
+                _items.Add(cartItem);
+            }
+            cartItem.Count += count;
 
             return "Product successfully added";
+        }
+        public string Add(Service service, uint count = 1)
+        {
+            CartItem? cartItem = _items.Find(value => value.Service == service);
+            if (cartItem == null)
+            {
+                cartItem ??= new(service);
+                _items.Add(cartItem);
+            }
+
+            return "Service successfully added";
+        }
+        public void Clear()
+        {
+            _items.Clear();
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return new CartItemEnum(ApplicationContext.Cart);
         }
     }
 }

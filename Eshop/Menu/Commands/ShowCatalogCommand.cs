@@ -7,12 +7,14 @@ namespace Eshop.Menu.Commands
         public string Description { get; } = productType == typeof(Product) ? "Products" : "Services";
         
         private readonly Dictionary<int, IMenuCommand> _catCommands = new()
-            {
-                { 1, new PreviosProductsCommand() },
-                { 2, new NextProductsCommand() },
-                { 9, new SetQtyDisplayedCommand() },
-                { 0, new BackCommand() }
-            };
+        {
+            { 1, new PreviosProductsCommand() },
+            { 2, new NextProductsCommand() },
+            { 3, new AddToCartCommand() },
+            { 4, new ShowCartCommand() },
+            { 9, new SetQtyDisplayedCommand() },
+            { 0, new BackCommand() }
+        };
 
         public void Execute(MenuPage currentPage)
         {
