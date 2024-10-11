@@ -4,43 +4,52 @@ namespace Eshop.Core
 {
     public class Cart : IEnumerable
     {
-        public List<CartItem> _items = [];
+        public List<CartItem> Items = [];
+        public uint Count
+        {
+            get
+            {
+                uint count = 0;
+                Items.ForEach(item => count += item.Count);
+                return count;
+            }
+        }
         public decimal TotalAmount
         {
             get
             {
                 decimal sum = 0.0M;
-                _items.ForEach(item => sum += item.Amount);
+                Items.ForEach(item => sum += item.Amount);
                 return sum;
             }
         }
 
         public string Add(Product product, uint count)
         {
-            CartItem? cartItem = _items.Find(value => value.Product == product);
+            CartItem? cartItem = Items.Find(value => value.Product == product);
             if (cartItem == null)
             {
                 cartItem ??= new(product);
-                _items.Add(cartItem);
+                Items.Add(cartItem);
             }
             cartItem.Count += count;
 
             return "Product successfully added";
         }
-        public string Add(Service service, uint count = 1)
+        public string Add(Service service)
         {
-            CartItem? cartItem = _items.Find(value => value.Service == service);
+            CartItem? cartItem = Items.Find(value => value.Service == service);
             if (cartItem == null)
             {
                 cartItem ??= new(service);
-                _items.Add(cartItem);
+                Items.Add(cartItem);
             }
 
             return "Service successfully added";
         }
         public void Clear()
         {
-            _items.Clear();
+            Items.Clear();
         }
 
         public IEnumerator GetEnumerator()

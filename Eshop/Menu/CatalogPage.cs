@@ -33,9 +33,7 @@ namespace Eshop.Menu
 
         public override void DrawPage()
         {
-            Console.Clear();
-
-            Console.WriteLine(_title);
+            Console.WriteLine(_title + "                 Cart({0})", ApplicationContext.Cart.Count);
 
             var firstIndex = ProdQty * (PageNum - 1);
 
@@ -47,7 +45,14 @@ namespace Eshop.Menu
 
                 if (productsForDraw.Count == 0)
                 {
-                    previosPage?.Show();
+                    if (PageNum > 1)
+                    {
+                        PageNum--;
+                        Show();
+                    }
+                    else
+                        PreviosPage?.Show();
+
                     return;
                 }
 
@@ -72,7 +77,13 @@ namespace Eshop.Menu
                 
                 if (productsForDraw.Count == 0)
                 {
-                    previosPage?.Show();
+                    if (PageNum > 1)
+                    {
+                        PageNum--;
+                        Show();
+                    }else 
+                        PreviosPage?.Show();
+                    
                     return;
                 }
                 

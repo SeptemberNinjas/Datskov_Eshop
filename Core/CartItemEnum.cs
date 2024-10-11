@@ -13,7 +13,7 @@ namespace Eshop.Core
 
         public CartItemEnum(Cart cart)
         {
-            _item = [.. cart._items];
+            _item = [.. cart.Items];
         }
 
         public bool MoveNext()

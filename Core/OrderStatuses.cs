@@ -1,9 +1,9 @@
 ﻿namespace Eshop.Core
 {
-    internal enum OrderStatuses
+    public enum OrderStatuses
     {
         New,
-        InProcessing,
+        Paid,
         Сompleted
     }
 }

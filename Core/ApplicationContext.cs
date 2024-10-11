@@ -4,7 +4,9 @@
     {
         private static Product[] _products = [];
         private static Service[] _services = [];
-        public static Cart Cart { get; } = new Cart();
+        public static Cart Cart { get; } = [];
+        public static List<Order> Orders { get; } = [];
+        public static int LastOrderNum { get; set; } = 1;
         public static Service[] GetServices()
         {
             if (_services.Length == 0)

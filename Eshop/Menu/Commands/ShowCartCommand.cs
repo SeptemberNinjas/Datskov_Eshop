@@ -8,7 +8,7 @@ namespace Eshop.Menu.Commands
 
         public void Execute(MenuPage currentPage)
         {
-            var cartPage = new CartPage(currentPage, new());
+            var cartPage = new CartPage(currentPage, []);
             cartPage.Show();
         }
     }
