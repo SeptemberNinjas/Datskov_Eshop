@@ -1,4 +1,6 @@
-﻿namespace Eshop.Core;
+﻿using System.Xml.Linq;
+
+namespace Eshop.Core;
 
 public class Product
 {
@@ -18,5 +20,11 @@ public class Product
     public Product(int Id, string Name, decimal Price, uint Stock, string Description) : this(Id, Name, Price, Stock)
     {
         this.Description = Description;
+    }
+    public void Deconstruct(out int id, out string name, out decimal price)
+    {
+        id = Id;
+        name = Name;
+        price = Price;
     }
 }
