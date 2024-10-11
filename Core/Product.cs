@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using System.Diagnostics;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Eshop.Core;
 
@@ -21,10 +22,14 @@ public class Product
     {
         this.Description = Description;
     }
-    public void Deconstruct(out int id, out string name, out decimal price)
+    public void DeconstructToDictionary(out Dictionary<string, string> descriptionData)
     {
-        id = Id;
-        name = Name;
-        price = Price;
+        descriptionData = new()
+        {
+            { "Id", Id.ToString() },
+            { "Name", Name },
+            { "Price", Price.ToString() },
+            { "Description", Description }
+        };
     }
 }

@@ -17,5 +17,15 @@
         {
             this.Description = Description;
         }
+        public void DeconstructToDictionary(out Dictionary<string, string> descriptionData)
+        {
+            descriptionData = new()
+            {
+                { "Id", Id.ToString() },
+                { "Name", Name },
+                { "Price", Price.ToString() },
+                { "Description", Description }
+            };
+        }
     }
 }

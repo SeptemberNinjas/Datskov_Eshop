@@ -1,5 +1,6 @@
 ﻿using Eshop.Core;
 using Eshop.Menu.Commands;
+using System.Diagnostics;
 using System.Text;
 
 namespace Eshop.Menu
@@ -40,23 +41,26 @@ namespace Eshop.Menu
 
             List<Dictionary<string, string>> productsForDraw = [];
 
-            //List<Product>? productsForDraw = null;
-            List<Service>? servicesForDraw = null;
-
             if (ProductType == typeof(Product))
             {
                 productsForDraw = [];
                 for (int i = firstIndex; i < _products.Length && i < firstIndex + ProdQty; i++)
-                    productsForDraw.Add(_products[i]);
+                {
+                    _products[i].DeconstructToDictionary(out Dictionary<string, string> descriptionData);
+                    productsForDraw.Add(descriptionData);
+                }
+                    
             }
             else if (ProductType == typeof(Service))
             {
-                servicesForDraw = [];
                 for (int i = firstIndex; i < _services.Length && i < firstIndex + ProdQty; i++)
-                    servicesForDraw.Add(_services[i]);
+                {
+                    _services[i].DeconstructToDictionary(out Dictionary<string, string> descriptionData);
+                    productsForDraw.Add(descriptionData);
+                }
             }
 
-            if (productsForDraw?.Count == 0 || servicesForDraw?.Count == 0)
+            if (productsForDraw.Count == 0)
             {
                 if (PageNum > 1)
                 {
@@ -71,15 +75,15 @@ namespace Eshop.Menu
 
             var attributeLength = new Dictionary<string, int>
                 {
-                    { "Id", productsForDraw.Max(x => x.Id.ToString().Length) },
-                    { "Name", productsForDraw.Max(x => x.Name.Length) },
-                    { "Price", productsForDraw.Max(x => x.Price.ToString().Length) },
-                    { "Description", productsForDraw.Max(x => x.Description.ToString().Length) }
+                    { "Id", productsForDraw.Max(x => x["Id"].Length) },
+                    { "Name", productsForDraw.Max(x => x["Name"].Length) },
+                    { "Price", productsForDraw.Max(x => x["Price"].Length) },
+                    { "Description", productsForDraw.Max(x => x["Description"].Length) }
                 };
 
             DrawCatalogHeader(attributeLength);
-            foreach (var prod in productsForDraw ?? servicesForDraw)
-                DrawProductDescription(prod.Id, prod.Name, prod.Price, prod.Description, attributeLength);
+            foreach (var prod in productsForDraw)
+                DrawProductDescription(prod["Id"], prod["Name"], prod["Price"], prod["Description"], attributeLength);
 
             DrawCommandInterface();
         }
@@ -97,7 +101,7 @@ namespace Eshop.Menu
             DrawStringDelimiter(attributeLength);
         }
 
-        private static void DrawStringDelimiter(Dictionary<string, int?> attributeLength)
+        private static void DrawStringDelimiter(Dictionary<string, int> attributeLength)
         {
             Console.Write("+--" + DrawAddChar("-", int.Max(attributeLength["Id"], 2)));
             Console.Write("+--" + DrawAddChar("-", int.Max(attributeLength["Name"], 4)));
@@ -106,13 +110,15 @@ namespace Eshop.Menu
             Console.WriteLine("+");
         }
 
-        private static void DrawProductDescription(int id, string name, decimal price, string description, Dictionary<string, int?> attributeLength)
+        private static void DrawProductDescription(string id, string name, string price, string description, Dictionary<string, int> attributeLength)
         {
-            Console.Write("| " + id + DrawAddChar(" ", int.Max(attributeLength["Id"], 2) - id.ToString().Length + 1));
+            Console.Write("| " + id + DrawAddChar(" ", int.Max(attributeLength["Id"], 2) - id.Length + 1));
             Console.Write("| " + name + DrawAddChar(" ", int.Max(attributeLength["Name"], 4) - name.Length + 1));
-            Console.Write("| " + price + DrawAddChar(" ", int.Max(attributeLength["Price"], 5) - price.ToString().Length + 1));
+            Console.Write("| " + price + DrawAddChar(" ", int.Max(attributeLength["Price"], 5) - price.Length + 1));
             Console.Write("| " + description + DrawAddChar(" ", int.Max(attributeLength["Description"], 11) - description.Length + 1));
             Console.WriteLine("|");
+
+            DrawStringDelimiter(attributeLength);
         }
 
         private static string DrawAddChar(string Char, int count)
