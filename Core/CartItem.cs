@@ -4,7 +4,7 @@
     {
         public Product? Product { get; }
         public Service? Service { get; }
-        public decimal Price { get => Product != null ? Product.Price : Service != null ? Service.Price : 0; }
+        public decimal Price { get => Product?.Price ?? Service?.Price ?? 0; }
         public uint Count { get; set; }
         public decimal Amount { get => (decimal)Count * Price; }
 

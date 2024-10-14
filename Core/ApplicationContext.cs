@@ -20,11 +20,10 @@
 
         public static Service[] Services { get { return _services; } }
 
-        private static int _lastOrderNum = 1;
+        private static int _lastOrderNum = 0;
         public static Cart Cart { get; } = new();
         public static List<Order> Orders { get; } = [];
-        public static int LastOrderNum { get => _lastOrderNum++; }
-
+        
         public static Product? GetProductByID(int Id)
         {
             return _products.FirstOrDefault(x => x.Id == Id);
@@ -33,5 +32,6 @@
         {
             return _services.FirstOrDefault(x => x.Id == Id);
         }
+        public static int GetNewOrderNumber() => ++_lastOrderNum;
     }
 }

@@ -10,7 +10,7 @@
 
         public Order(Cart cart)
         {
-            Number = ApplicationContext.LastOrderNum;
+            Number = ApplicationContext.GetNewOrderNumber();
 
             foreach (CartItem cartItem in cart.Items)
             {
