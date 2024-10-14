@@ -6,8 +6,7 @@
 
         public void Execute(MenuPage currentPage)
         {
-            MenuPage? previosPage = currentPage.PreviosPage;
-            previosPage?.Show();
+            currentPage.PreviosPage?.Show();
         }
     }
 }

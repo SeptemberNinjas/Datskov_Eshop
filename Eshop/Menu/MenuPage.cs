@@ -5,11 +5,11 @@ namespace Eshop.Menu
     internal class MenuPage(MenuPage? previosPage, Dictionary<int, IMenuCommand> commands)
     {
         public MenuPage? PreviosPage { get; } = previosPage;
+        public string InfoMessage { get; set; } = string.Empty;
         private readonly Dictionary<int, IMenuCommand> _commands = commands;
 
         public virtual void DrawPage()
         {
-            Console.Clear();
             DrawCommandInterface();
         }
 
@@ -26,12 +26,30 @@ namespace Eshop.Menu
 
             do
             {
+                Console.Clear();
+
+                if (InfoMessage != string.Empty)
+                {
+                    Console.WriteLine(InfoMessage);
+                    InfoMessage = string.Empty;
+                }
                 DrawPage();
                 answer = Console.ReadLine();
             }
             while (!int.TryParse(answer, out int selectedAction) || !_commands.TryGetValue(selectedAction, out selectedCommand));
 
             selectedCommand.Execute(this);
+        }
+
+        public void GetUserInput(string message, out int result)
+        {
+            string? input;
+            do
+            {
+                Console.WriteLine(message);
+                input = Console.ReadLine();
+            }
+            while (!int.TryParse(input, out result));
         }
     }
 }

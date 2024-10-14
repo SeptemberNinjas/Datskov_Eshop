@@ -10,6 +10,8 @@ namespace Eshop
             var mainMenuCommands = new Dictionary<int, IMenuCommand>
             {
                 { 1, new ShowCatalogChoiceCommand() },
+                { 4, new ShowCartCommand() },
+                { 5, new ShowOrdersCommand() },
                 { 0, new ExitCommand() }
             };
 
