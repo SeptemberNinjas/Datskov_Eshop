@@ -1,6 +1,5 @@
 ﻿using Eshop.Core;
 using Eshop.Menu.Commands;
-using System.Diagnostics;
 using System.Text;
 
 namespace Eshop.Menu
@@ -13,22 +12,28 @@ namespace Eshop.Menu
 
         private readonly string _title = string.Empty;
 
-        private readonly Product[] _products = [];
-        private readonly Service[] _services = [];
+        public Product[] Products = [];
+        public Service[] Services = [];
 
         public CatalogPage(MenuPage? previosPage, Dictionary<int, IMenuCommand> commands, Type productType, int pageNum = 1) : this(previosPage, commands)
         {
+            commands.Clear();
+            commands.Add(1, new PreviosProductsCommand());
+            commands.Add(2, new NextProductsCommand());
+            commands.Add(3, new AddToCartCommand());
+            commands.Add(4, new ShowCartCommand());
+            commands.Add(9, new SetQtyDisplayedCommand());
+            commands.Add(0, new BackCommand());
+
             PageNum = pageNum;
             ProductType = productType;
 
             if (ProductType == typeof(Product))
             {
-                _products = ApplicationContext.GetProducts();
                 _title = "--// Products //--";
             }
             else
             {
-                _services = ApplicationContext.GetServices();
                 _title = "--// Services //--";
             }
         }
@@ -44,18 +49,18 @@ namespace Eshop.Menu
             if (ProductType == typeof(Product))
             {
                 productsForDraw = [];
-                for (int i = firstIndex; i < _products.Length && i < firstIndex + ProdQty; i++)
+                for (int i = firstIndex; i < Products.Length && i < firstIndex + ProdQty; i++)
                 {
-                    _products[i].DeconstructToDictionary(out Dictionary<string, string> descriptionData);
+                    Products[i].Deconstruct(out Dictionary<string, string> descriptionData);
                     productsForDraw.Add(descriptionData);
                 }
-                    
+
             }
             else if (ProductType == typeof(Service))
             {
-                for (int i = firstIndex; i < _services.Length && i < firstIndex + ProdQty; i++)
+                for (int i = firstIndex; i < Services.Length && i < firstIndex + ProdQty; i++)
                 {
-                    _services[i].DeconstructToDictionary(out Dictionary<string, string> descriptionData);
+                    Services[i].Deconstruct(out Dictionary<string, string> descriptionData);
                     productsForDraw.Add(descriptionData);
                 }
             }

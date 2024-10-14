@@ -5,8 +5,10 @@ namespace Eshop.Menu
 {
     internal class CartPage : MenuPage
     {
+        public Cart Cart { get; set; } = new();
         public CartPage(MenuPage? previosPage, Dictionary<int, IMenuCommand> commands) : base(previosPage, commands)
         {
+            commands.Clear();
             commands.Add(1, new CreateOrderCommand());
             commands.Add(5, new ShowOrdersCommand());
             commands.Add(10, new ClearCartCommand());
@@ -17,7 +19,7 @@ namespace Eshop.Menu
             Console.WriteLine("--// Cart // --");
             Console.WriteLine("----------------------------------------------------------");
 
-            foreach (CartItem cartItem in ApplicationContext.Cart)
+            foreach (CartItem cartItem in Cart.Items)
             {
                 Console.WriteLine("Name:   " + cartItem.Product?.Name + cartItem.Service?.Name);
                 Console.WriteLine("Price:  " + cartItem.Price);
@@ -26,8 +28,8 @@ namespace Eshop.Menu
                 Console.WriteLine("----------------------------------------------------------");
             }
             Console.WriteLine();
-            Console.WriteLine("{0} positions", ApplicationContext.Cart.Count);
-            Console.WriteLine("Total amount : {0} RUB", ApplicationContext.Cart.TotalAmount);
+            Console.WriteLine("{0} positions", Cart.Count);
+            Console.WriteLine("Total amount : {0} RUB", Cart.TotalAmount);
             Console.WriteLine();
 
             DrawCommandInterface();

@@ -3,37 +3,21 @@
     public class Order
     {
         public int Number { get; }
-        public List<OrderItem> Items = [];
+        private readonly List<OrderItem> _items = [];
         public OrderStatuses Status { get; set; } = OrderStatuses.New;
-        public uint Count
-        {
-            get
-            {
-                uint count = 0;
-                Items.ForEach(item => count += item.Count);
-                return count;
-            }
-        }
-        public decimal TotalAmount
-        {
-            get
-            {
-                decimal sum = 0.0M;
-                Items.ForEach(item => sum += item.Amount);
-                return sum;
-            }
-        }
+        public uint Count { get => (uint)_items.Sum(item => item.Count); }
+        public decimal TotalAmount { get => _items.Sum(item => item.Amount); }
 
         public Order(Cart cart)
         {
             Number = ApplicationContext.LastOrderNum;
-            ApplicationContext.LastOrderNum++;
 
-            foreach (CartItem cartItem in cart)
+            foreach (CartItem cartItem in cart.Items)
             {
-                Items.Add(new(cartItem));
-            } 
+                _items.Add(new(cartItem));
+                if (cartItem.Product is not null)
+                    cartItem.Product.Stock -= cartItem.Count;
+            }
         }
-        public void SetStatus(OrderStatuses status) => Status = status;
     }
 }

@@ -40,5 +40,16 @@ namespace Eshop.Menu
 
             selectedCommand.Execute(this);
         }
+
+        public void GetUserInput(string message, out int result)
+        {
+            string? input;
+            do
+            {
+                Console.WriteLine(message);
+                input = Console.ReadLine();
+            }
+            while (!int.TryParse(input, out result));
+        }
     }
 }

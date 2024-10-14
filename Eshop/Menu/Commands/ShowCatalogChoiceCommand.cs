@@ -14,8 +14,8 @@ namespace Eshop.Menu.Commands
 
         public void Execute(MenuPage currentPage)
         {
-            MenuPage Catalog = new(currentPage, _catCommands);
-            Catalog.Show();
+            MenuPage catalogChoice = new(currentPage, _catCommands);
+            catalogChoice.Show();
         }
     }
 }

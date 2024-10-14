@@ -1,4 +1,6 @@
-﻿namespace Eshop.Menu.Commands
+﻿using Eshop.Core;
+
+namespace Eshop.Menu.Commands
 {
     internal class ShowOrdersCommand : IMenuCommand
     {
@@ -6,7 +8,7 @@
 
         public void Execute(MenuPage currentPage)
         {
-            OrdersPage orderPage = new(currentPage, []);
+            OrdersPage orderPage = new(currentPage, []) { Orders = [.. ApplicationContext.Orders] };
             orderPage.Show();
         }
     }

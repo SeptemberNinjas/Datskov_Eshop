@@ -1,9 +1,4 @@
 ﻿using Eshop.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Eshop.Menu.Commands
 {
@@ -13,19 +8,10 @@ namespace Eshop.Menu.Commands
 
         public void Execute(MenuPage currentPage)
         {
-            Product? product;
-            Service? service;
+            Product? product = null;
+            Service? service = null;
 
-            int prodId;
-            {
-                string? input;
-                do
-                {
-                    Console.WriteLine("Input product ID");
-                    input = Console.ReadLine();
-                }
-                while (!int.TryParse(input, out prodId) || prodId == 0);
-            }
+            currentPage.GetUserInput("Input product ID", out int prodId);
 
             if (currentPage is CatalogPage catPage)
             {
@@ -42,6 +28,8 @@ namespace Eshop.Menu.Commands
                         ApplicationContext.Cart.Add(service);
                 }
             }
+            if (product is null && service is null)
+                currentPage.InfoMessage = $"Id {prodId} not found!";
 
             currentPage.Show();
         }

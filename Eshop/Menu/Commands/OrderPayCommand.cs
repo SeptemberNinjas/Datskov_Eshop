@@ -8,17 +8,8 @@ namespace Eshop.Menu.Commands
 
         public void Execute(MenuPage currentPage)
         {
-            int orderNum;
-            {
-                string? input;
-                do
-                {
-                    Console.WriteLine("Input order number");
-                    input = Console.ReadLine();
-                }
-                while (!int.TryParse(input, out orderNum) || orderNum == 0);
-            }
-
+            currentPage.GetUserInput("Input order number", out int orderNum);
+            
             var order = ApplicationContext.Orders.Find(x => x.Number == orderNum);
             if (order == null)
                 currentPage.InfoMessage = $"Order number {orderNum} not found!";
@@ -26,7 +17,7 @@ namespace Eshop.Menu.Commands
                 currentPage.InfoMessage = $"Order number {orderNum} alredy paid!";
             else
             {
-                order.SetStatus(OrderStatuses.Paid);
+                order.Status = OrderStatuses.Paid;
                 currentPage.InfoMessage = $"Order number {orderNum} successfully paid!";
             }
             currentPage.Show();

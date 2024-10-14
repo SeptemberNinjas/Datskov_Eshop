@@ -1,7 +1,4 @@
-﻿using System.Diagnostics;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
-namespace Eshop.Core;
+﻿namespace Eshop.Core;
 
 public class Product
 {
@@ -22,7 +19,7 @@ public class Product
     {
         this.Description = Description;
     }
-    public void DeconstructToDictionary(out Dictionary<string, string> descriptionData)
+    public void Deconstruct(out Dictionary<string, string> descriptionData)
     {
         descriptionData = new()
         {

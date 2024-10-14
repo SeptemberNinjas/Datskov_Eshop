@@ -17,7 +17,7 @@
         {
             this.Description = Description;
         }
-        public void DeconstructToDictionary(out Dictionary<string, string> descriptionData)
+        public void Deconstruct(out Dictionary<string, string> descriptionData)
         {
             descriptionData = new()
             {

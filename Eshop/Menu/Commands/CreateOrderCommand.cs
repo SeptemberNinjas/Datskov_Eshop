@@ -12,12 +12,13 @@ namespace Eshop.Menu.Commands
             {
                 currentPage.InfoMessage = "Cart is empty!";
                 currentPage.Show();
+                return;
             }
 
             ApplicationContext.Orders.Add(new(ApplicationContext.Cart));
             ApplicationContext.Cart.Clear();
-            var ordersPage = new OrdersPage(currentPage, []);
-            ordersPage.Show();
+
+            new ShowOrdersCommand().Execute(currentPage);
         }
     }
 }
