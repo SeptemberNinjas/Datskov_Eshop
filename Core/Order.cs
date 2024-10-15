@@ -12,11 +12,12 @@
         {
             Number = ApplicationContext.GetNewOrderNumber();
 
-            foreach (CartItem cartItem in cart.Items)
+            foreach (CartItem<SaleItem> cartItem in cart.Items)
             {
                 _items.Add(new(cartItem));
-                if (cartItem.Product is not null)
-                    cartItem.Product.Stock -= cartItem.Count;
+
+                if (cartItem.SaleItem is Product product)
+                    product.Stock -= cartItem.Count;
             }
         }
     }

@@ -15,13 +15,13 @@ namespace Eshop.Menu.Commands
 
             if (currentPage is CatalogPage catPage)
             {
-                if (catPage.ProductType == typeof(Product))
+                if (catPage.SaleItemType == typeof(Product))
                 {
                     product = ApplicationContext.GetProductByID(prodId);
                     if (product is not null)
                         ApplicationContext.Cart.Add(product, 1);
                 }
-                else if (catPage.ProductType == typeof(Service))
+                else if (catPage.SaleItemType == typeof(Service))
                 {
                     service = ApplicationContext.GetServiceByID(prodId);
                     if (service is not null)

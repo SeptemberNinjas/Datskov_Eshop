@@ -1,4 +1,6 @@
-﻿namespace Eshop.Menu.Commands
+﻿using Eshop.Core;
+
+namespace Eshop.Menu.Commands
 {
     class NextProductsCommand : IMenuCommand
     {

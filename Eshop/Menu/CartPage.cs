@@ -19,9 +19,9 @@ namespace Eshop.Menu
             Console.WriteLine("--// Cart // --");
             Console.WriteLine("----------------------------------------------------------");
 
-            foreach (CartItem cartItem in Cart.Items)
+            foreach (CartItem<SaleItem> cartItem in Cart.Items)
             {
-                Console.WriteLine("Name:   " + cartItem.Product?.Name + cartItem.Service?.Name);
+                Console.WriteLine("Name:   " + cartItem.SaleItem.Name);
                 Console.WriteLine("Price:  " + cartItem.Price);
                 Console.WriteLine("Count:  " + cartItem.Count);
                 Console.WriteLine("Amount: " + cartItem.Amount);

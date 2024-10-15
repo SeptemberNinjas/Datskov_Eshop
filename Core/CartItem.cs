@@ -1,22 +1,17 @@
 ﻿namespace Eshop.Core
 {
-    public class CartItem
+    public class CartItem<T> where T : SaleItem
     {
-        public Product? Product { get; }
-        public Service? Service { get; }
-        public decimal Price { get => Product?.Price ?? Service?.Price ?? 0; }
+        public T SaleItem { get; }
+
+        public decimal Price { get => SaleItem.Price; }
         public uint Count { get; set; }
         public decimal Amount { get => (decimal)Count * Price; }
 
-        public CartItem(Product product, uint count = 0)
+        public CartItem(T product, uint count = 1)
         {
-            Product = product;
+            SaleItem = product;
             Count = count;
-        }
-        public CartItem(Service service)
-        {
-            Service = service;
-            Count = 1;
         }
     }
 }
