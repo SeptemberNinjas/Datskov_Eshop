@@ -4,6 +4,6 @@
     {
         public string Description { get; }
 
-        public void Execute(MenuPage currentPage);
+        public void Execute();
     }
 }

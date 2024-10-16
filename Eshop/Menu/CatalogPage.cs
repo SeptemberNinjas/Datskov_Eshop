@@ -13,7 +13,7 @@ namespace Eshop.Menu
         private readonly string _title = string.Empty;
 
         public SaleItem[] SaleItems = [];
-        
+
         public CatalogPage(MenuPage? previosPage, Dictionary<int, IMenuCommand> commands, Type saleItemType, int pageNum = 1) : base(previosPage, commands)
         {
             commands.Clear();
@@ -26,14 +26,14 @@ namespace Eshop.Menu
 
             PageNum = pageNum;
             SaleItemType = saleItemType;
-            
+
             _title = SaleItemType == typeof(Product) ? "--// Products //--" : "--// Services //--";
-            
+
         }
 
         public override void DrawPage()
         {
-            Console.WriteLine(_title + "                 Cart({0})", ApplicationContext.Cart.Count);
+            Console.WriteLine(_title);
 
             var firstIndex = ProdQty * (PageNum - 1);
 

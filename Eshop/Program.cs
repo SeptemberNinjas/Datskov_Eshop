@@ -1,13 +1,12 @@
-﻿using Eshop.Menu;
-using Eshop.Menu.Commands;
+﻿using Eshop.Menu.Commands;
 
 namespace Eshop
 {
     internal class Program
     {
-        static void Main(string[] args)
-        {
-            var mainMenuCommands = new Dictionary<int, IMenuCommand>
+        internal static ApplicationContext Context = new();
+
+        internal static Dictionary<int, IMenuCommand> mainMenuCommands = new()
             {
                 { 1, new ShowCatalogChoiceCommand() },
                 { 4, new ShowCartCommand() },
@@ -15,8 +14,11 @@ namespace Eshop
                 { 0, new ExitCommand() }
             };
 
-            MenuPage MainMenu = new(null, mainMenuCommands);
-            MainMenu.Show();
+        static void Main(string[] args)
+        {
+            Context.CurrentPage = new(null, mainMenuCommands);
+            while (true)
+                Context.CurrentPage.Show();
         }
     }
 }

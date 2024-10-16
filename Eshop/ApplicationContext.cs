@@ -1,7 +1,13 @@
-﻿namespace Eshop.Core
+﻿using Eshop.Menu;
+using Eshop.Core;
+
+namespace Eshop
 {
-    public class ApplicationContext
+    internal class ApplicationContext()
     {
+        internal MenuPage CurrentPage { get; set; } = new(null, []);
+        internal IPaymentMethod? PaymentMethod { get; set; }
+
         private readonly static Product[] _products = [
                     new (1, "IPhone 16 Pro ultimate HD quadro maximum", 155499, 10, "the best of the best of the best"),
                     new (2, "Xiaomi iphone killer [assasinnator] 512mp", 70999, 200),
@@ -21,9 +27,9 @@
         public static Service[] Services { get { return _services; } }
 
         private static int _lastOrderNum = 0;
-        public static Cart Cart { get; } = new();
+        public Cart Cart { get; } = new();
         public static List<Order> Orders { get; } = [];
-        
+
         public static Product? GetProductByID(int Id)
         {
             return _products.FirstOrDefault(x => x.Id == Id);

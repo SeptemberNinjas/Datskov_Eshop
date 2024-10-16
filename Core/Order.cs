@@ -8,9 +8,9 @@
         public uint Count { get => (uint)_items.Sum(item => item.Count); }
         public decimal TotalAmount { get => _items.Sum(item => item.Amount); }
 
-        public Order(Cart cart)
+        public Order(int number, Cart cart)
         {
-            Number = ApplicationContext.GetNewOrderNumber();
+            Number = number;
 
             foreach (CartItem<SaleItem> cartItem in cart.Items)
             {

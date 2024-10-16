@@ -38,7 +38,7 @@ namespace Eshop.Menu
             }
             while (!int.TryParse(answer, out int selectedAction) || !_commands.TryGetValue(selectedAction, out selectedCommand));
 
-            selectedCommand.Execute(this);
+            selectedCommand.Execute();
         }
 
         public void GetUserInput(string message, out int result)
@@ -50,6 +50,16 @@ namespace Eshop.Menu
                 input = Console.ReadLine();
             }
             while (!int.TryParse(input, out result));
+        }
+        public void GetUserInput(string message, out decimal result)
+        {
+            string? input;
+            do
+            {
+                Console.WriteLine(message);
+                input = Console.ReadLine();
+            }
+            while (!decimal.TryParse(input, out result));
         }
     }
 }

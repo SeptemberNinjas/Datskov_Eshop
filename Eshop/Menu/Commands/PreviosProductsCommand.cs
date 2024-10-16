@@ -1,17 +1,15 @@
-﻿using Eshop.Core;
-
-namespace Eshop.Menu.Commands
+﻿namespace Eshop.Menu.Commands
 {
     internal class PreviosProductsCommand : IMenuCommand
     {
         public string Description { get; } = "Previos page";
 
-        public void Execute(MenuPage currentPage)
+        public void Execute()
         {
+            var currentPage = Program.Context.CurrentPage;
+
             if (currentPage is CatalogPage catPage && catPage.PageNum > 1)
                 catPage.PageNum--;
-
-            currentPage.Show();
         }
     }
 }

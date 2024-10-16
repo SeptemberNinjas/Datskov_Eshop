@@ -12,10 +12,11 @@ namespace Eshop.Menu.Commands
                 { 0, new BackCommand() }
             };
 
-        public void Execute(MenuPage currentPage)
+        public void Execute()
         {
-            MenuPage catalogChoice = new(currentPage, _catCommands);
-            catalogChoice.Show();
+            var previosPage = Program.Context.CurrentPage;
+
+            Program.Context.CurrentPage = new(previosPage, _catCommands);
         }
     }
 }

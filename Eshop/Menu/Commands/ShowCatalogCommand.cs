@@ -6,11 +6,12 @@ namespace Eshop.Menu.Commands
     {
         public string Description { get; } = productType == typeof(Product) ? "Products" : "Services";
 
-        public void Execute(MenuPage currentPage)
+        public void Execute()
         {
-            CatalogPage Catalog = new(currentPage, [], productType) { SaleItems = productType == typeof(Service) ? ApplicationContext.Services : ApplicationContext.Products };
+            var previosPage = Program.Context.CurrentPage;
+            CatalogPage catalogPage = new(previosPage, [], productType) { SaleItems = productType == typeof(Service) ? ApplicationContext.Services : ApplicationContext.Products };
 
-            Catalog.Show();
+            Program.Context.CurrentPage = catalogPage;
         }
     }
 }
