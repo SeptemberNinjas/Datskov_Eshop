@@ -4,10 +4,10 @@
     {
         public string Description { get; } = "Set qty displayed";
 
-        public void Execute()
+        public void Execute(ApplicationContext app)
         {
             int selectedQty;
-            var currentPage = Program.Context.CurrentPage;
+            var currentPage = app.CurrentPage;
 
             do
                 currentPage.GetUserInput("Qty (1-5): ", out selectedQty);

@@ -4,7 +4,7 @@ namespace Eshop
 {
     internal class Program
     {
-        internal static ApplicationContext Context = new();
+        private static readonly ApplicationContext _context = new();
 
         internal static Dictionary<int, IMenuCommand> mainMenuCommands = new()
             {
@@ -16,9 +16,12 @@ namespace Eshop
 
         static void Main(string[] args)
         {
-            Context.CurrentPage = new(null, mainMenuCommands);
+            _context.CurrentPage = new(null, mainMenuCommands);
             while (true)
-                Context.CurrentPage.Show();
+            {
+                var command = _context.CurrentPage.Show();
+                command.Execute(_context);
+            }
         }
     }
 }

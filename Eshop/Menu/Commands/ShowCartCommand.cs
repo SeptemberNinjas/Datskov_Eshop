@@ -4,11 +4,11 @@
     {
         public string Description { get; } = "Show cart";
 
-        public void Execute()
+        public void Execute(ApplicationContext app)
         {
-            var previosPage = Program.Context.CurrentPage;
+            var previosPage = app.CurrentPage;
 
-            Program.Context.CurrentPage = new CartPage(previosPage, []) { Cart = Program.Context.Cart };
+            app.CurrentPage = new CartPage(previosPage, []) { Cart = app.Cart };
         }
     }
 }

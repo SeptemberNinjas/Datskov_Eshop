@@ -4,9 +4,9 @@
     {
         public string Description { get; } = "Next page";
 
-        public void Execute()
+        public void Execute(ApplicationContext app)
         {
-            var currentPage = Program.Context.CurrentPage;
+            var currentPage = app.CurrentPage;
 
             if (currentPage is CatalogPage catPage)
                 catPage.PageNum++;

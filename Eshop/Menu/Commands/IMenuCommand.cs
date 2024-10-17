@@ -4,6 +4,6 @@
     {
         public string Description { get; }
 
-        public void Execute();
+        public void Execute(ApplicationContext app);
     }
 }

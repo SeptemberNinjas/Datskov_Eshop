@@ -4,20 +4,20 @@
     {
         public string Description { get; } = "Create order";
 
-        public void Execute()
+        public void Execute(ApplicationContext app)
         {
-            if (Program.Context.Cart.Count == 0)
+            if (app.Cart.Count == 0)
             {
-                var currentPage = Program.Context.CurrentPage;
+                var currentPage = app.CurrentPage;
 
                 currentPage.InfoMessage = "Cart is empty!";
                 return;
             }
 
-            ApplicationContext.Orders.Add(new(ApplicationContext.GetNewOrderNumber(), Program.Context.Cart));
-            Program.Context.Cart.Clear();
+            app.Orders.Add(new(app.GetNewOrderNumber(), app.Cart));
+            app.Cart.Clear();
 
-            new ShowOrdersCommand().Execute();
+            new ShowOrdersCommand().Execute(app);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Eshop.Core;
+using System.Data;
 
 namespace Eshop.Menu.Commands
 {
@@ -6,14 +7,16 @@ namespace Eshop.Menu.Commands
     {
         private MenuPage _currentPage = new(null, []);
 
+        private IPaymentMethod? _paymentMethod;
+
         public string Description { get; } = "Payment for the order";
 
-        public void Execute()
+        public void Execute(ApplicationContext app)
         {
-            _currentPage = Program.Context.CurrentPage;
+            _currentPage = app.CurrentPage;
             _currentPage.GetUserInput("Input order number", out int orderNum);
 
-            var order = ApplicationContext.Orders.Find(x => x.Number == orderNum);
+            var order = app.Orders.Find(x => x.Number == orderNum);
             if (order == null)
                 _currentPage.InfoMessage = $"Order number {orderNum} not found!";
             else if (order.Status != OrderStatuses.New)
@@ -21,7 +24,7 @@ namespace Eshop.Menu.Commands
             else
             {
                 SelectPaymentMethod();
-                if (Program.Context.PaymentMethod is IPaymentMethod paymentMethod)
+                if (_paymentMethod is IPaymentMethod paymentMethod)
                 {
                     paymentMethod.PaymentAmount = order.TotalAmount;
 
@@ -49,10 +52,10 @@ namespace Eshop.Menu.Commands
             {
                 1 => new CashPayment(),
                 2 => new CashLessPayment(),
-                _ => new CashPayment()
+                _ => throw new NotSupportedException()
             };
 
-            Program.Context.PaymentMethod = paymentMethod;
+            _paymentMethod = paymentMethod;
         }
         public void InteractionWithClient(string message) => _currentPage.InfoMessage += message + Environment.NewLine;
 

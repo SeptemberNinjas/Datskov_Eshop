@@ -4,11 +4,11 @@
     {
         public string Description { get; } = "Back";
 
-        public void Execute()
+        public void Execute(ApplicationContext app)
         {
-            var currentPage = Program.Context.CurrentPage;
+            var currentPage = app.CurrentPage;
             if (currentPage.PreviosPage is not null)
-                Program.Context.CurrentPage = currentPage.PreviosPage;
+                app.CurrentPage = currentPage.PreviosPage;
         }
     }
 }

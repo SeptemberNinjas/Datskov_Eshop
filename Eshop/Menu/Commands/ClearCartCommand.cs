@@ -4,12 +4,12 @@
     {
         public string Description { get; } = "Clear cart";
 
-        public void Execute()
+        public void Execute(ApplicationContext app)
         {
-            var currentPage = Program.Context.CurrentPage;
+            var currentPage = app.CurrentPage;
             currentPage.InfoMessage = "Cart was cleared";
 
-            Program.Context.Cart.Clear();
+            app.Cart.Clear();
         }
     }
 }

@@ -4,12 +4,12 @@
     {
         public string Description { get; } = "Show my orders";
 
-        public void Execute()
+        public void Execute(ApplicationContext app)
         {
-            var previosPage = Program.Context.CurrentPage;
-            OrdersPage ordersPage = new(previosPage, []) { Orders = [.. ApplicationContext.Orders] };
+            var previosPage = app.CurrentPage;
+            OrdersPage ordersPage = new(previosPage, []) { Orders = [.. app.Orders] };
 
-            Program.Context.CurrentPage = ordersPage;
+            app.CurrentPage = ordersPage;
         }
     }
 }

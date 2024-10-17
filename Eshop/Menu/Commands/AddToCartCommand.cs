@@ -6,12 +6,12 @@ namespace Eshop.Menu.Commands
     {
         public string Description { get; } = "Add product to cart";
 
-        public void Execute()
+        public void Execute(ApplicationContext app)
         {
             Product? product = null;
             Service? service = null;
 
-            var currentPage = Program.Context.CurrentPage;
+            var currentPage = app.CurrentPage;
 
             currentPage.GetUserInput("Input product ID", out int prodId);
 
@@ -19,15 +19,15 @@ namespace Eshop.Menu.Commands
             {
                 if (catPage.SaleItemType == typeof(Product))
                 {
-                    product = ApplicationContext.GetProductByID(prodId);
+                    product = app.GetProductByID(prodId);
                     if (product is not null)
-                        Program.Context.Cart.Add(product, 1);
+                        app.Cart.Add(product, 1);
                 }
                 else if (catPage.SaleItemType == typeof(Service))
                 {
-                    service = ApplicationContext.GetServiceByID(prodId);
+                    service = app.GetServiceByID(prodId);
                     if (service is not null)
-                        Program.Context.Cart.Add(service);
+                        app.Cart.Add(service);
                 }
             }
             if (product is null && service is null)

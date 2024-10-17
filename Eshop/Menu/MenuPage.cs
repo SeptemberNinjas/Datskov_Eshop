@@ -19,7 +19,7 @@ namespace Eshop.Menu
                 Console.WriteLine("" + KeyValue.Key + ": " + KeyValue.Value.Description);
             Console.Write("Select action: ");
         }
-        public void Show()
+        public IMenuCommand Show()
         {
             IMenuCommand? selectedCommand;
             string? answer;
@@ -38,7 +38,7 @@ namespace Eshop.Menu
             }
             while (!int.TryParse(answer, out int selectedAction) || !_commands.TryGetValue(selectedAction, out selectedCommand));
 
-            selectedCommand.Execute();
+            return selectedCommand;
         }
 
         public void GetUserInput(string message, out int result)
