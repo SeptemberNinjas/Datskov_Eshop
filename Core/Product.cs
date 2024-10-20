@@ -1,6 +1,6 @@
 ﻿namespace Eshop.Core;
 
-public class Product : SaleItem
+public class Product : SaleItem, IStoredDataCatalog
 {
     public uint Stock { get; set; }
 
