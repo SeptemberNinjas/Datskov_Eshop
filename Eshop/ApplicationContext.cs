@@ -1,6 +1,6 @@
 ﻿using Eshop.Core;
 using Eshop.DataAccess;
-using Eshop.DataAccess.MemmoryDataStorage;
+using Eshop.DataAccess.JSONDataStorage;
 using Eshop.Menu;
 
 namespace Eshop
@@ -12,7 +12,7 @@ namespace Eshop
         internal IRepository<Product> ProductManager { get; } = _repositoryFactory.ProductManager();
         internal IRepository<Service> ServiceManager { get; } = _repositoryFactory.ServiceManager();
 
-        private static readonly RepositoryFactory _repositoryFactory = new MemmoryDataStorageFactory();
+        private static readonly RepositoryFactory _repositoryFactory = new JSONDataStorageFactory();
 
         internal Product[] Products { get { return [.. ProductManager.GetAll()]; } }
 

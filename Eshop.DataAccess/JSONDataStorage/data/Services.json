@@ -1,0 +1,26 @@
+[
+  {
+    "Id": 1,
+    "Name": "Update Android to version 1.2.1.45.85.1.9.7.33",
+    "Description": "",
+    "Price": 1000
+  },
+  {
+    "Id": 2,
+    "Name": "Extra warranty 120 years",
+    "Description": "",
+    "Price": 3000
+  },
+  {
+    "Id": 3,
+    "Name": "Watch in your eyes",
+    "Description": "",
+    "Price": 100
+  },
+  {
+    "Id": 4,
+    "Name": "Some service1",
+    "Description": "",
+    "Price": 200
+  }
+]

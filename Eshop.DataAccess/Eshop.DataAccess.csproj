@@ -10,4 +10,13 @@
     <ProjectReference Include="..\Core\Eshop.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="JSONDataStorage\data\Products.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="JSONDataStorage\data\Services.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

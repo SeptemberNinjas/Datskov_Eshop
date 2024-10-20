@@ -1,6 +1,6 @@
 ﻿namespace Eshop.Core
 {
-    public interface IRepository<T> where T : IStoredDataCatalog
+    public interface IRepository<T>
     {
         public IReadOnlyCollection<T> GetAll();
         public virtual T? GetById(int Id) => GetAll().FirstOrDefault(item => item.Id == Id);

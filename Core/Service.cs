@@ -1,6 +1,6 @@
 ﻿namespace Eshop.Core
 {
-    public class Service : SaleItem, IStoredDataCatalog
+    public class Service : SaleItem
     {
         public Service(int id, string name, decimal price) : base(id, name, price)
         {
