@@ -19,13 +19,13 @@ namespace Eshop.Menu.Commands
             {
                 if (catPage.SaleItemType == typeof(Product))
                 {
-                    product = app.GetProductByID(prodId);
+                    product = app.ProductManager.GetById(prodId);
                     if (product is not null)
                         app.Cart.Add(product, 1);
                 }
                 else if (catPage.SaleItemType == typeof(Service))
                 {
-                    service = app.GetServiceByID(prodId);
+                    service = app.ServiceManager.GetById(prodId);
                     if (service is not null)
                         app.Cart.Add(service);
                 }

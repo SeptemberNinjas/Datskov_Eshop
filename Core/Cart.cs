@@ -2,12 +2,12 @@
 {
     public class Cart
     {
-        public List<CartItem<SaleItem>> Items { get; } = [];
+        public List<CartItem> Items { get; set; } = [];
         public uint Count { get => (uint)Items.Sum(item => item.Count); }
         public decimal TotalAmount { get => Items.Sum(item => item.Amount); }
         public string Add(Product product, uint count)
         {
-            CartItem<SaleItem>? cartItem = Items.Find(value => value.SaleItem == product);
+            CartItem? cartItem = Items.Find(value => value.Product == product);
             if (cartItem == null)
             {
                 cartItem = new(product, count);
@@ -20,7 +20,7 @@
         }
         public string Add(Service service)
         {
-            CartItem<SaleItem>? cartItem = Items.Find(value => value.SaleItem == service);
+            CartItem? cartItem = Items.Find(value => value.Service == service);
             if (cartItem == null)
             {
                 cartItem = new(service);

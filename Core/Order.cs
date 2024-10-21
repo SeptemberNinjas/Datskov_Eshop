@@ -12,12 +12,9 @@
         {
             Number = number;
 
-            foreach (CartItem<SaleItem> cartItem in cart.Items)
+            foreach (CartItem cartItem in cart.Items)
             {
                 _items.Add(new(cartItem));
-
-                if (cartItem.SaleItem is Product product)
-                    product.Stock -= cartItem.Count;
             }
         }
     }

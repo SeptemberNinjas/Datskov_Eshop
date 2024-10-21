@@ -9,7 +9,7 @@ namespace Eshop.Menu.Commands
         public void Execute(ApplicationContext app)
         {
             var previosPage = app.CurrentPage;
-            CatalogPage catalogPage = new(previosPage, [], productType) { SaleItems = productType == typeof(Service) ? app.Services : app.Products };
+            CatalogPage catalogPage = new(previosPage, [], productType) { SaleItems = productType == typeof(Service) ? app.ServiceManager.GetAll().ToArray() : app.ProductManager.GetAll().ToArray() };
 
             app.CurrentPage = catalogPage;
         }
