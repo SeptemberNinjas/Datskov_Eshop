@@ -14,5 +14,10 @@ namespace Eshop.DataAccess.MemmoryDataStorage
 
             return _services;
         }
+
+        public void Save(Service obj)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

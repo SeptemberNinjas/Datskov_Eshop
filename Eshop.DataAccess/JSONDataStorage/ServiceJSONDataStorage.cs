@@ -17,5 +17,10 @@ namespace Eshop.DataAccess.JSONDataStorage
 
             return services;
         }
+
+        public void Save(Service obj)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

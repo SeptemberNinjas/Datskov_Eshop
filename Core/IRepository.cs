@@ -5,5 +5,6 @@
         public IReadOnlyCollection<T> GetAll();
         public virtual T? GetById(int Id) => GetAll().FirstOrDefault(item => item.Id == Id);
         public virtual int GetCount() => GetAll().Count;
+        public void Save(T obj);
     }
 }

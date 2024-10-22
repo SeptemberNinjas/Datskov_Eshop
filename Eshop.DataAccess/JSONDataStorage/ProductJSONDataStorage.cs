@@ -15,5 +15,10 @@ namespace Eshop.DataAccess.JSONDataStorage
 
             return (IReadOnlyCollection<Product>)(products ?? []);
         }
+
+        public void Save(Product obj)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

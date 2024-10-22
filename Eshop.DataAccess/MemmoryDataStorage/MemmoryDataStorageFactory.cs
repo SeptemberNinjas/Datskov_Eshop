@@ -4,6 +4,11 @@ namespace Eshop.DataAccess.MemmoryDataStorage
 {
     public class MemmoryDataStorageFactory : RepositoryFactory
     {
+        public override IRepository<Order> OrderManager()
+        {
+            return new OrderMemmoryDataStorage();
+        }
+
         public override IRepository<Product> ProductManager()
         {
             return new ProductMemmoryDataStorage();

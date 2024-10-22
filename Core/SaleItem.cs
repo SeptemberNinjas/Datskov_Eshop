@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace Eshop.Core
+﻿namespace Eshop.Core
 {
     public abstract class SaleItem
     {

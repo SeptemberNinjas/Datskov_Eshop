@@ -1,11 +1,11 @@
 ﻿namespace Eshop.Core
 {
-    public class OrderItem(CartItem cartItem)
+    public class OrderItem
     {
-        public Product? Product { get; } = cartItem.Product;
-        public Service? Service { get; } = cartItem.Service;
-        public decimal Price { get; } = cartItem.Price;
-        public uint Count { get; } = cartItem.Count;
-        public decimal Amount { get; } = cartItem.Amount;
+        public Product? Product { get; set; }
+        public Service? Service { get; set; }
+        public decimal Price { get; set; }
+        public uint Count { get; set; }
+        public decimal Amount { get; set; }
     }
 }

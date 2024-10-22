@@ -8,32 +8,41 @@ namespace Eshop.Menu.Commands
 
         public void Execute(ApplicationContext app)
         {
-            Product? product = null;
-            Service? service = null;
-
+            string? infoMessage = null;
+            
             var currentPage = app.CurrentPage;
+            currentPage.GetUserInput("Input product ID", out int saleItemId);
 
-            currentPage.GetUserInput("Input product ID", out int prodId);
-
-            if (currentPage is CatalogPage catPage)
-            {
-                if (catPage.SaleItemType == typeof(Product))
-                {
-                    product = app.ProductManager.GetById(prodId);
-                    if (product is not null)
-                        app.Cart.Add(product, 1);
-                }
-                else if (catPage.SaleItemType == typeof(Service))
-                {
-                    service = app.ServiceManager.GetById(prodId);
-                    if (service is not null)
-                        app.Cart.Add(service);
-                }
-            }
-            if (product is null && service is null)
-                currentPage.InfoMessage = $"Id {prodId} not found!";
+            var product = app.ProductManager.GetById(saleItemId);
+            var service = app.ServiceManager.GetById(saleItemId);
+            if (product is not null)
+                app.Cart.Add(product, 1);
+            else if (service is not null)
+                app.Cart.Add(service);
             else
-                currentPage.InfoMessage = "Successfully added!";
+                infoMessage = $"Id {saleItemId} not found!";
+
+            currentPage.InfoMessage = infoMessage ?? "Successfully added!";
+
+            //if (currentPage is CatalogPage<Product> catPage)
+            //{
+            //    if (catPage.SaleItemType == typeof(Product))
+            //    {
+            //        product = app.ProductManager.GetById(prodId);
+            //        if (product is not null)
+            //            app.Cart.Add(product, 1);
+            //    }
+            //    else if (catPage.SaleItemType == typeof(Service))
+            //    {
+            //        service = app.ServiceManager.GetById(prodId);
+            //        if (service is not null)
+            //            app.Cart.Add(service);
+            //    }
+            //}
+            //if (product is null && service is null)
+            //    currentPage.InfoMessage = $"Id {prodId} not found!";
+            //else
+            //    currentPage.InfoMessage = "Successfully added!";
         }
     }
 }

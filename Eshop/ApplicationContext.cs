@@ -13,6 +13,7 @@ namespace Eshop
 
         internal IRepository<Product> ProductManager { get; }
         internal IRepository<Service> ServiceManager { get; }
+        internal IRepository<Order> OrderManager { get; }
 
         internal ApplicationContext()
         {
@@ -26,19 +27,22 @@ namespace Eshop
             var _repositoryFactory = _sp.GetRequiredService<RepositoryFactory>();
             ProductManager = _repositoryFactory.ProductManager();
             ServiceManager = _repositoryFactory.ServiceManager();
+            OrderManager = _repositoryFactory.OrderManager();
         }
 
         internal MenuPage CurrentPage { get; set; } = new(null, []);
 
-        private static int _lastOrderNum = 0;
         public Cart Cart { get => GetCart(); }
 
         private Cart? _cart;
-        public List<Order> Orders { get; } = [];
 
-        public int GetNewOrderNumber() => ++_lastOrderNum;
+        public int GetNewOrderNumber()
+        {
+            var lastId = OrderManager.GetAll().MaxBy(x => x.Id)?.Id ?? 0;
+            return ++lastId;
+        }
 
-        private Cart GetCart() 
+        private Cart GetCart()
         {
             if (_cart != null)
                 return _cart;
@@ -46,12 +50,8 @@ namespace Eshop
             if (!File.Exists("CacheData\\Cart.json"))
                 return new();
 
-            var jsOptions = new JsonSerializerOptions();
-            jsOptions.IncludeFields = true;
-            jsOptions.PropertyNameCaseInsensitive = true;
-
             using var fs = new FileStream("CacheData\\Cart.json", FileMode.OpenOrCreate);
-            _cart = JsonSerializer.Deserialize<Cart>(fs, jsOptions) ?? new();
+            _cart = JsonSerializer.Deserialize<Cart>(fs) ?? new();
 
             return _cart;
         }
@@ -60,7 +60,7 @@ namespace Eshop
         {
             if (_cart != null)
             {
-                using var fs = new FileStream("CacheData\\Cart.json", FileMode.OpenOrCreate);
+                using var fs = new FileStream("CacheData\\Cart.json", FileMode.Truncate);
                 JsonSerializer.Serialize(fs, _cart);
             }
         }

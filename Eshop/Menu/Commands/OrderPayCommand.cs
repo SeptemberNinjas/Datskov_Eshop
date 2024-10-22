@@ -16,7 +16,7 @@ namespace Eshop.Menu.Commands
             _currentPage = app.CurrentPage;
             _currentPage.GetUserInput("Input order number", out int orderNum);
 
-            var order = app.Orders.Find(x => x.Number == orderNum);
+            var order = app.OrderManager.GetById(orderNum);
             if (order == null)
                 _currentPage.InfoMessage = $"Order number {orderNum} not found!";
             else if (order.Status != OrderStatuses.New)
@@ -31,6 +31,7 @@ namespace Eshop.Menu.Commands
                     if (paymentMethod.MakePayment(this))
                     {
                         order.Status = OrderStatuses.Paid;
+                        app.OrderManager.Save(order);
                         _currentPage.InfoMessage += $"Order number {orderNum} was successfully paid!";
                     }
                     else

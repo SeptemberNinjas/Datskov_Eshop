@@ -13,5 +13,11 @@ namespace Eshop.DataAccess.JSONDataStorage
         {
             return new ServiceJSONDataStorage();
         }
+
+        public override IRepository<Order> OrderManager()
+        {
+            return new OrderJSONDataStorage();
+        }
+        
     }
 }

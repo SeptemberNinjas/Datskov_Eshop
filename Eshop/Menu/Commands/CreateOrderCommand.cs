@@ -1,4 +1,6 @@
-﻿namespace Eshop.Menu.Commands
+﻿using Eshop.Core;
+
+namespace Eshop.Menu.Commands
 {
     internal class CreateOrderCommand : IMenuCommand
     {
@@ -14,7 +16,18 @@
                 return;
             }
 
-            app.Orders.Add(new(app.GetNewOrderNumber(), app.Cart));
+            var order = new Order(app.GetNewOrderNumber());
+            foreach (var cartItem in app.Cart.Items)
+            {
+                var orderLine = order.Add();
+                orderLine.Product = cartItem.Product;
+                orderLine.Price = cartItem.Price;
+                orderLine.Service = cartItem.Service;
+                orderLine.Count = cartItem.Count;
+                orderLine.Amount = cartItem.Amount;
+            }
+
+            app.OrderManager.Save(order);
             app.Cart.Clear();
 
             new ShowOrdersCommand().Execute(app);

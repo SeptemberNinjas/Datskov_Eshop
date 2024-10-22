@@ -1,21 +1,21 @@
 ﻿namespace Eshop.Core
 {
-    public class Order
+    public class Order : IStoragedCatalog
     {
-        public int Number { get; }
-        private readonly List<OrderItem> _items = [];
+        public int Id { get; }
+        public int Number { get => Id; }
+        public List<OrderItem> Items { get; set; } = [];
         public OrderStatuses Status { get; set; } = OrderStatuses.New;
-        public uint Count { get => (uint)_items.Sum(item => item.Count); }
-        public decimal TotalAmount { get => _items.Sum(item => item.Amount); }
+        public uint Count { get => (uint)Items.Sum(item => item.Count); }
+        public decimal TotalAmount { get => Items.Sum(item => item.Amount); }
 
-        public Order(int number, Cart cart)
-        {
-            Number = number;
+        public Order(int id) => Id = id;
 
-            foreach (CartItem cartItem in cart.Items)
-            {
-                _items.Add(new(cartItem));
-            }
+        public OrderItem Add() 
+        { 
+            var item = new OrderItem();
+            Items.Add(item);
+            return item;
         }
     }
 }

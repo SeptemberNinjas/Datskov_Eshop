@@ -7,7 +7,7 @@
         public decimal TotalAmount { get => Items.Sum(item => item.Amount); }
         public string Add(Product product, uint count)
         {
-            CartItem? cartItem = Items.Find(value => value.Product == product);
+            CartItem? cartItem = Items.FirstOrDefault(value => value.Product?.Id == product.Id);
             if (cartItem == null)
             {
                 cartItem = new(product, count);
@@ -20,7 +20,7 @@
         }
         public string Add(Service service)
         {
-            CartItem? cartItem = Items.Find(value => value.Service == service);
+            CartItem? cartItem = Items.FirstOrDefault(value => value.Service?.Id == service.Id);
             if (cartItem == null)
             {
                 cartItem = new(service);
@@ -29,9 +29,7 @@
 
             return "Service successfully added";
         }
-        public void Clear()
-        {
-            Items.Clear();
-        }
+
+        public void Clear() => Items.Clear();
     }
 }

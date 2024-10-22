@@ -21,7 +21,8 @@ namespace Eshop.Menu
 
             foreach (CartItem cartItem in Cart.Items)
             {
-                Console.WriteLine("Name:   " + cartItem.Product?.Name ?? cartItem.Service?.Name);
+                var name = cartItem.Product?.Name ?? cartItem.Service?.Name;
+                Console.WriteLine("Name:   " + name);
                 Console.WriteLine("Price:  " + cartItem.Price);
                 Console.WriteLine("Count:  " + cartItem.Count);
                 Console.WriteLine("Amount: " + cartItem.Amount);
