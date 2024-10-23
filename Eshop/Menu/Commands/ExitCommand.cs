@@ -4,6 +4,6 @@
     {
         public string Description { get; } = "Exit";
 
-        public void Execute(MenuPage currentPage) => Environment.Exit(0);
+        public void Execute(ApplicationContext app) => Environment.Exit(0);
     }
 }

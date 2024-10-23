@@ -4,9 +4,11 @@
     {
         public string Description { get; } = "Back";
 
-        public void Execute(MenuPage currentPage)
+        public void Execute(ApplicationContext app)
         {
-            currentPage.PreviosPage?.Show();
+            var currentPage = app.CurrentPage;
+            if (currentPage.PreviosPage is not null)
+                app.CurrentPage = currentPage.PreviosPage;
         }
     }
 }

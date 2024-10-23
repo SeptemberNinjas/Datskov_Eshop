@@ -1,24 +1,23 @@
-﻿using Eshop.Core;
-
-namespace Eshop.Menu.Commands
+﻿namespace Eshop.Menu.Commands
 {
     internal class CreateOrderCommand : IMenuCommand
     {
         public string Description { get; } = "Create order";
 
-        public void Execute(MenuPage currentPage)
+        public void Execute(ApplicationContext app)
         {
-            if (ApplicationContext.Cart.Count == 0)
+            if (app.Cart.Count == 0)
             {
+                var currentPage = app.CurrentPage;
+
                 currentPage.InfoMessage = "Cart is empty!";
-                currentPage.Show();
                 return;
             }
 
-            ApplicationContext.Orders.Add(new(ApplicationContext.Cart));
-            ApplicationContext.Cart.Clear();
+            app.Orders.Add(new(app.GetNewOrderNumber(), app.Cart));
+            app.Cart.Clear();
 
-            new ShowOrdersCommand().Execute(currentPage);
+            new ShowOrdersCommand().Execute(app);
         }
     }
 }

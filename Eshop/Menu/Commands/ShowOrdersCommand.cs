@@ -1,15 +1,15 @@
-﻿using Eshop.Core;
-
-namespace Eshop.Menu.Commands
+﻿namespace Eshop.Menu.Commands
 {
     internal class ShowOrdersCommand : IMenuCommand
     {
         public string Description { get; } = "Show my orders";
 
-        public void Execute(MenuPage currentPage)
+        public void Execute(ApplicationContext app)
         {
-            OrdersPage orderPage = new(currentPage, []) { Orders = [.. ApplicationContext.Orders] };
-            orderPage.Show();
+            var previosPage = app.CurrentPage;
+            OrdersPage ordersPage = new(previosPage, []) { Orders = [.. app.Orders] };
+
+            app.CurrentPage = ordersPage;
         }
     }
 }

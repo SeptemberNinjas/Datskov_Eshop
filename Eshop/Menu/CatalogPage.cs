@@ -4,18 +4,17 @@ using System.Text;
 
 namespace Eshop.Menu
 {
-    internal class CatalogPage(MenuPage? previosPage, Dictionary<int, IMenuCommand> commands) : MenuPage(previosPage, commands)
+    internal class CatalogPage : MenuPage
     {
         public static int ProdQty { get; set; } = 5;
         public int PageNum { get; set; }
-        public Type ProductType { get; } = typeof(Product);
+        public Type SaleItemType { get; }
 
         private readonly string _title = string.Empty;
 
-        public Product[] Products = [];
-        public Service[] Services = [];
+        public SaleItem[] SaleItems = [];
 
-        public CatalogPage(MenuPage? previosPage, Dictionary<int, IMenuCommand> commands, Type productType, int pageNum = 1) : this(previosPage, commands)
+        public CatalogPage(MenuPage? previosPage, Dictionary<int, IMenuCommand> commands, Type saleItemType, int pageNum = 1) : base(previosPage, commands)
         {
             commands.Clear();
             commands.Add(1, new PreviosProductsCommand());
@@ -26,46 +25,27 @@ namespace Eshop.Menu
             commands.Add(0, new BackCommand());
 
             PageNum = pageNum;
-            ProductType = productType;
+            SaleItemType = saleItemType;
 
-            if (ProductType == typeof(Product))
-            {
-                _title = "--// Products //--";
-            }
-            else
-            {
-                _title = "--// Services //--";
-            }
+            _title = SaleItemType == typeof(Product) ? "--// Products //--" : "--// Services //--";
+
         }
 
         public override void DrawPage()
         {
-            Console.WriteLine(_title + "                 Cart({0})", ApplicationContext.Cart.Count);
+            Console.WriteLine(_title);
 
             var firstIndex = ProdQty * (PageNum - 1);
 
-            List<Dictionary<string, string>> productsForDraw = [];
+            List<Dictionary<string, string>> itemsForDraw = [];
 
-            if (ProductType == typeof(Product))
+            for (int i = firstIndex; i < SaleItems.Length && i < firstIndex + ProdQty; i++)
             {
-                productsForDraw = [];
-                for (int i = firstIndex; i < Products.Length && i < firstIndex + ProdQty; i++)
-                {
-                    Products[i].Deconstruct(out Dictionary<string, string> descriptionData);
-                    productsForDraw.Add(descriptionData);
-                }
-
-            }
-            else if (ProductType == typeof(Service))
-            {
-                for (int i = firstIndex; i < Services.Length && i < firstIndex + ProdQty; i++)
-                {
-                    Services[i].Deconstruct(out Dictionary<string, string> descriptionData);
-                    productsForDraw.Add(descriptionData);
-                }
+                SaleItems[i].Representation(out Dictionary<string, string> descriptionData);
+                itemsForDraw.Add(descriptionData);
             }
 
-            if (productsForDraw.Count == 0)
+            if (itemsForDraw.Count == 0)
             {
                 if (PageNum > 1)
                 {
@@ -80,14 +60,14 @@ namespace Eshop.Menu
 
             var attributeLength = new Dictionary<string, int>
                 {
-                    { "Id", productsForDraw.Max(x => x["Id"].Length) },
-                    { "Name", productsForDraw.Max(x => x["Name"].Length) },
-                    { "Price", productsForDraw.Max(x => x["Price"].Length) },
-                    { "Description", productsForDraw.Max(x => x["Description"].Length) }
+                    { "Id", itemsForDraw.Max(x => x["Id"].Length) },
+                    { "Name", itemsForDraw.Max(x => x["Name"].Length) },
+                    { "Price", itemsForDraw.Max(x => x["Price"].Length) },
+                    { "Description", itemsForDraw.Max(x => x["Description"].Length) }
                 };
 
             DrawCatalogHeader(attributeLength);
-            foreach (var prod in productsForDraw)
+            foreach (var prod in itemsForDraw)
                 DrawProductDescription(prod["Id"], prod["Name"], prod["Price"], prod["Description"], attributeLength);
 
             DrawCommandInterface();

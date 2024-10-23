@@ -6,32 +6,34 @@ namespace Eshop.Menu.Commands
     {
         public string Description { get; } = "Add product to cart";
 
-        public void Execute(MenuPage currentPage)
+        public void Execute(ApplicationContext app)
         {
             Product? product = null;
             Service? service = null;
+
+            var currentPage = app.CurrentPage;
 
             currentPage.GetUserInput("Input product ID", out int prodId);
 
             if (currentPage is CatalogPage catPage)
             {
-                if (catPage.ProductType == typeof(Product))
+                if (catPage.SaleItemType == typeof(Product))
                 {
-                    product = ApplicationContext.GetProductByID(prodId);
+                    product = app.GetProductByID(prodId);
                     if (product is not null)
-                        ApplicationContext.Cart.Add(product, 1);
+                        app.Cart.Add(product, 1);
                 }
-                else if (catPage.ProductType == typeof(Service))
+                else if (catPage.SaleItemType == typeof(Service))
                 {
-                    service = ApplicationContext.GetServiceByID(prodId);
+                    service = app.GetServiceByID(prodId);
                     if (service is not null)
-                        ApplicationContext.Cart.Add(service);
+                        app.Cart.Add(service);
                 }
             }
             if (product is null && service is null)
                 currentPage.InfoMessage = $"Id {prodId} not found!";
-
-            currentPage.Show();
+            else
+                currentPage.InfoMessage = "Successfully added!";
         }
     }
 }

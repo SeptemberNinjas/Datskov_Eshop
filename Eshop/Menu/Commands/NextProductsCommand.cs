@@ -4,12 +4,12 @@
     {
         public string Description { get; } = "Next page";
 
-        public void Execute(MenuPage currentPage)
+        public void Execute(ApplicationContext app)
         {
+            var currentPage = app.CurrentPage;
+
             if (currentPage is CatalogPage catPage)
                 catPage.PageNum++;
-
-            currentPage.Show();
         }
     }
 }

@@ -1,15 +1,15 @@
-﻿using Eshop.Core;
-
-namespace Eshop.Menu.Commands
+﻿namespace Eshop.Menu.Commands
 {
     internal class ClearCartCommand : IMenuCommand
     {
         public string Description { get; } = "Clear cart";
 
-        public void Execute(MenuPage currentPage)
+        public void Execute(ApplicationContext app)
         {
-            ApplicationContext.Cart.Clear();
-            currentPage.Show();
+            var currentPage = app.CurrentPage;
+            currentPage.InfoMessage = "Cart was cleared";
+
+            app.Cart.Clear();
         }
     }
 }
