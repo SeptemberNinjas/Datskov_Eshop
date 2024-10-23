@@ -1,42 +1,69 @@
-﻿using Eshop.Menu;
-using Eshop.Core;
+﻿using Eshop.Core;
+using Eshop.DataAccess;
+using Eshop.DataAccess.JSONDataStorage;
+using Eshop.Menu;
+using Microsoft.Extensions.DependencyInjection;
+using System.Text.Json;
 
 namespace Eshop
 {
-    internal class ApplicationContext()
+    internal class ApplicationContext
     {
+        private readonly IServiceProvider _sp;
+
+        internal IRepository<Product> ProductManager { get; }
+        internal IRepository<Service> ServiceManager { get; }
+        internal IRepository<Order> OrderManager { get; }
+
+        internal ApplicationContext()
+        {
+            var services = new ServiceCollection()
+                .AddScoped<RepositoryFactory, JSONDataStorageFactory>()
+                ;
+
+            using var sp = services.BuildServiceProvider();
+
+            _sp = sp;
+            var _repositoryFactory = _sp.GetRequiredService<RepositoryFactory>();
+            ProductManager = _repositoryFactory.ProductManager();
+            ServiceManager = _repositoryFactory.ServiceManager();
+            OrderManager = _repositoryFactory.OrderManager();
+        }
+
         internal MenuPage CurrentPage { get; set; } = new(null, []);
-        
-        private readonly Product[] _products = [
-                    new (1, "IPhone 16 Pro ultimate HD quadro maximum", 155499, 10, "the best of the best of the best"),
-                    new (2, "Xiaomi iphone killer [assasinnator] 512mp", 70999, 200),
-                    new (3, "Dexp phone GG340", 1699, 20000, "1mb/512kb 3\", 0,3mp"),
-                    new (4, "Samsung Galaxy Universe MilkyWay Dominator Keller Terron", 124599, 100),
-                    new (5, "End of Ideas product1", 599, 10 ,"some product"),
-                    new (6, "End of Ideas product2", 699, 10, "some product"),
-                    new (7, "End of Ideas product3", 799, 10, "some product")];
-        public Product[] Products { get { return _products; } }
 
-        private readonly static Service[] _services = [
-                    new (1, "Update Android to version 1.2.1.45.85.1.9.7.33", 1000),
-                    new (2, "Extra warranty 120 years", 3000),
-                    new (3, "Watch in your eyes", 100),
-                    new (4, "Some service1", 200)];
+        public Cart Cart { get => GetCart(); }
 
-        public Service[] Services { get { return _services; } }
+        private Cart? _cart;
 
-        private static int _lastOrderNum = 0;
-        public Cart Cart { get; } = new();
-        public List<Order> Orders { get; } = [];
-
-        public Product? GetProductByID(int Id)
+        public int GetNewOrderNumber()
         {
-            return _products.FirstOrDefault(x => x.Id == Id);
+            var lastId = OrderManager.GetAll().MaxBy(x => x.Id)?.Id ?? 0;
+            return ++lastId;
         }
-        public Service? GetServiceByID(int Id)
+
+        private Cart GetCart()
         {
-            return _services.FirstOrDefault(x => x.Id == Id);
+            if (_cart != null)
+                return _cart;
+
+            if (!File.Exists("CacheData\\Cart.json"))
+                return new();
+
+            using var fs = new FileStream("CacheData\\Cart.json", FileMode.OpenOrCreate);
+            _cart = JsonSerializer.Deserialize<Cart>(fs) ?? new();
+            _cart.CartChangeNotyfy += UpdateCartCache;
+
+            return _cart;
         }
-        public int GetNewOrderNumber() => ++_lastOrderNum;
+
+        internal void UpdateCartCache()
+        {
+            if (_cart != null)
+            {
+                using var fs = new FileStream("CacheData\\Cart.json", FileMode.Truncate);
+                JsonSerializer.Serialize(fs, _cart);
+            }
+        }
     }
 }

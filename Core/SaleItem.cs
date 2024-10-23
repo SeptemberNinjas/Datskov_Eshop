@@ -6,8 +6,9 @@
         public string Name { get; set; }
         public string Description { get; set; } = string.Empty;
         public decimal Price { get; set; }
+        public abstract SaleItemType Type { get; }
 
-        public SaleItem(int id, string name, decimal price)
+        public SaleItem(int id, string name, decimal price) 
         {
             Id = id;
             Name = name;

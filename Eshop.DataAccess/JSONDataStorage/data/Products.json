@@ -1,0 +1,51 @@
+[
+  {
+    "Stock": 10,
+    "Id": 1,
+    "Name": "IPhone 16 Pro ultimate HD quadro maximum",
+    "Description": "the best of the best of the best",
+    "Price": 155499
+  },
+  {
+    "Stock": 200,
+    "Id": 2,
+    "Name": "Xiaomi iphone killer [assasinnator] 512mp",
+    "Description": "",
+    "Price": 70999
+  },
+  {
+    "Stock": 20000,
+    "Id": 3,
+    "Name": "Dexp phone GG340",
+    "Description": "1mb/512kb 3\u0022, 0,3mp",
+    "Price": 1699
+  },
+  {
+    "Stock": 100,
+    "Id": 4,
+    "Name": "Samsung Galaxy Universe MilkyWay Dominator Keller Terron",
+    "Description": "",
+    "Price": 124599
+  },
+  {
+    "Stock": 10,
+    "Id": 5,
+    "Name": "End of Ideas product1",
+    "Description": "some product",
+    "Price": 599
+  },
+  {
+    "Stock": 10,
+    "Id": 6,
+    "Name": "End of Ideas product2",
+    "Description": "some product",
+    "Price": 699
+  },
+  {
+    "Stock": 10,
+    "Id": 7,
+    "Name": "End of Ideas product3",
+    "Description": "some product",
+    "Price": 799
+  }
+]
