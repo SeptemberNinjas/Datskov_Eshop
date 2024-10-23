@@ -4,10 +4,7 @@
     {
         public string Description { get; } = "Exit";
 
-        public void Execute(ApplicationContext app)
-        {
-            app.BeforeExit();
-            Environment.Exit(0);
-        } 
+        public void Execute(ApplicationContext app) => Environment.Exit(0);
+
     }
 }

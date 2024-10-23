@@ -7,8 +7,9 @@
         public void Execute(ApplicationContext app)
         {
             var previosPage = app.CurrentPage;
-            OrdersPage ordersPage = new(previosPage, []) { Orders = [.. app.OrderManager.GetAll()] };
-
+            OrdersPage.Orders = [.. app.OrderManager.GetAll()];
+            OrdersPage ordersPage = new(previosPage, []);
+            
             app.CurrentPage = ordersPage;
         }
     }

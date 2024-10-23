@@ -52,11 +52,12 @@ namespace Eshop
 
             using var fs = new FileStream("CacheData\\Cart.json", FileMode.OpenOrCreate);
             _cart = JsonSerializer.Deserialize<Cart>(fs) ?? new();
+            _cart.CartChangeNotyfy += UpdateCartCache;
 
             return _cart;
         }
 
-        internal void BeforeExit()
+        internal void UpdateCartCache()
         {
             if (_cart != null)
             {

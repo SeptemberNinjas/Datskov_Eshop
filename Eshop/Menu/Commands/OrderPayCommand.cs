@@ -1,13 +1,12 @@
 ﻿using Eshop.Core;
-using System.Data;
 
 namespace Eshop.Menu.Commands
 {
-    internal class OrderPayCommand : IMenuCommand, IPaymentUI
+    internal class OrderPayCommand : IMenuCommand
     {
         private MenuPage _currentPage = new(null, []);
 
-        private IPaymentMethod? _paymentMethod;
+        private IOrderPayment? _paymentMethod;
 
         public string Description { get; } = "Payment for the order";
 
@@ -17,27 +16,25 @@ namespace Eshop.Menu.Commands
             _currentPage.GetUserInput("Input order number", out int orderNum);
 
             var order = app.OrderManager.GetById(orderNum);
-            if (order == null)
-                _currentPage.InfoMessage = $"Order number {orderNum} not found!";
-            else if (order.Status != OrderStatuses.New)
-                _currentPage.InfoMessage = $"Order number {orderNum} alredy paid!";
-            else
-            {
-                SelectPaymentMethod();
-                if (_paymentMethod is IPaymentMethod paymentMethod)
-                {
-                    paymentMethod.PaymentAmount = order.TotalAmount;
 
-                    if (paymentMethod.MakePayment(this))
-                    {
-                        order.Status = OrderStatuses.Paid;
-                        app.OrderManager.Save(order);
-                        _currentPage.InfoMessage += $"Order number {orderNum} was successfully paid!";
-                    }
-                    else
-                        _currentPage.InfoMessage += $"Something went wrong!";
-                }
+            SelectPaymentMethod();
+            if (_paymentMethod is not IOrderPayment paymentMethod)
+                return;
+            
+            paymentMethod.Order = order;
+
+            _currentPage.GetUserInput($"Due {paymentMethod.PaymentAmount}, how much money will you give me?", out decimal userInput);
+
+            paymentMethod.ReceivedAmount = userInput;
+            paymentMethod.MakePayment(out var result);
+
+            if (result.IsSuccess && order != null)
+            {
+                order.Status = OrderStatuses.Paid;
+                app.OrderManager.Save(order);
+                OrdersPage.Orders = [.. app.OrderManager.GetAll()];
             }
+            _currentPage.InfoMessage = result.ResultDescription;
         }
         private void SelectPaymentMethod()
         {
@@ -49,19 +46,14 @@ namespace Eshop.Menu.Commands
                 _currentPage.GetUserInput(inputMessage, out userInput);
             while (userInput != 1 && userInput != 2);
 
-            IPaymentMethod paymentMethod = userInput switch
+            IOrderPayment paymentMethod = userInput switch
             {
-                1 => new CashPayment(),
-                2 => new CashLessPayment(),
+                1 => new OrderCashPayment(),
+                2 => new OrderCashLessPayment(),
                 _ => throw new NotSupportedException()
             };
 
             _paymentMethod = paymentMethod;
         }
-        public void InteractionWithClient(string message) => _currentPage.InfoMessage += message + Environment.NewLine;
-
-        public void InteractionWithClient(string message, out int result) => _currentPage.GetUserInput(message, out result);
-
-        public void InteractionWithClient(string message, out decimal result) => _currentPage.GetUserInput(message, out result);
     }
 }

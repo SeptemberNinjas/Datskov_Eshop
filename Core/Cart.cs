@@ -2,6 +2,9 @@
 {
     public class Cart
     {
+        public delegate void CartChangeHandler();
+        public event CartChangeHandler? CartChangeNotyfy;
+
         public List<CartItem> Items { get; set; } = [];
         public uint Count { get => (uint)Items.Sum(item => item.Count); }
         public decimal TotalAmount { get => Items.Sum(item => item.Amount); }
@@ -16,6 +19,8 @@
             else
                 cartItem.Count += count;
 
+            CartChangeNotyfy?.Invoke();
+
             return "Product successfully added";
         }
         public string Add(Service service)
@@ -27,9 +32,15 @@
                 Items.Add(cartItem);
             }
 
+            CartChangeNotyfy?.Invoke();
+
             return "Service successfully added";
         }
 
-        public void Clear() => Items.Clear();
+        public void Clear()
+        {
+            Items.Clear();
+            CartChangeNotyfy?.Invoke();
+        }
     }
 }
