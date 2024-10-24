@@ -1,6 +1,7 @@
 ﻿using Eshop.Core;
 using Eshop.DataAccess;
 using Eshop.DataAccess.JSONDataStorage;
+using Eshop.DataAccess.PGDataStorage;
 using Eshop.Menu;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text.Json;
@@ -25,7 +26,7 @@ namespace Eshop
 
             _sp = sp;
             var _repositoryFactory = _sp.GetRequiredService<RepositoryFactory>();
-            ProductManager = _repositoryFactory.ProductManager();
+            ProductManager = new PGDataStorageFactory("Server=127.0.0.1;Port=5432;Database=eshop;Username=postgres;Password=password").ProductManager();//_repositoryFactory.ProductManager();
             ServiceManager = _repositoryFactory.ServiceManager();
             OrderManager = _repositoryFactory.OrderManager();
         }
