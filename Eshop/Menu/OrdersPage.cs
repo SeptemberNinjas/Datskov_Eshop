@@ -1,5 +1,6 @@
 ﻿using Eshop.Core;
 using Eshop.Menu.Commands;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Eshop.Menu
 {
@@ -8,8 +9,8 @@ namespace Eshop.Menu
         public static Order[] Orders { get; set; } = [];
         public OrdersPage(MenuPage? previosPage, Dictionary<int, IMenuCommand> commands) : base(previosPage, commands)
         {
-            commands.Add(1, new OrderPayCommand());
-            commands.Add(0, new BackCommand());
+            commands.Add(1, ServiceProvider.GetRequiredService<OrderPayCommand>());
+            commands.Add(0, ServiceProvider.GetRequiredService<BackCommand>());
         }
         public override void DrawPage()
         {

@@ -1,14 +1,12 @@
 ﻿namespace Eshop.Menu.Commands
 {
-    internal class ShowCartCommand : IMenuCommand
+    internal class ShowCartCommand(ApplicationContext context) : IMenuCommand
     {
         public string Description { get; } = "Show cart";
 
-        public void Execute(ApplicationContext app)
+        public void Execute()
         {
-            var previosPage = app.CurrentPage;
-
-            app.CurrentPage = new CartPage(previosPage, []) { Cart = app.Cart };
+            context.CurrentPage = new CartPage(context.CurrentPage, []);
         }
     }
 }

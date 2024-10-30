@@ -1,9 +1,11 @@
 ﻿using Eshop.Core;
 
-namespace Eshop.DataAccess.MemmoryDataStorage
+namespace Eshop.DataAccess.PGDataStorage
 {
-    internal class OrderMemmoryDataStorage : IRepository<Order>
+    class OrderPGDataStorage : DBContext, IRepository<Order>
     {
+        public OrderPGDataStorage(string connectionString) : base(connectionString) { }
+
         public IReadOnlyCollection<Order> GetAll()
         {
             throw new NotImplementedException();

@@ -1,6 +1,6 @@
 ﻿namespace Eshop.Core
 {
-    public interface IStoragedCatalog
+    public interface IStoraged
     {
         public int Id { get; }
     }

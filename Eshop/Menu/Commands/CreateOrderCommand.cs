@@ -1,23 +1,22 @@
 ﻿using Eshop.Core;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Eshop.Menu.Commands
 {
-    internal class CreateOrderCommand : IMenuCommand
+    internal class CreateOrderCommand(IServiceProvider sp, Cart cart, ApplicationContext context) : IMenuCommand
     {
         public string Description { get; } = "Create order";
 
-        public void Execute(ApplicationContext app)
+        public void Execute()
         {
-            if (app.Cart.Count == 0)
+            if (cart.Count == 0)
             {
-                var currentPage = app.CurrentPage;
-
-                currentPage.InfoMessage = "Cart is empty!";
+                context.CurrentPage.InfoMessage = "Cart is empty!";
                 return;
             }
 
-            var order = new Order(app.GetNewOrderNumber());
-            foreach (var cartItem in app.Cart.Items)
+            var order = new Order(context.GetNewOrderNumber());
+            foreach (var cartItem in cart.Items)
             {
                 var orderLine = order.Add();
                 orderLine.Product = cartItem.Product;
@@ -27,10 +26,10 @@ namespace Eshop.Menu.Commands
                 orderLine.Amount = cartItem.Amount;
             }
 
-            app.OrderManager.Save(order);
-            app.Cart.Clear();
+            sp.GetRequiredService<IRepository<Order>>().Save(order);
+            cart.Clear();
 
-            new ShowOrdersCommand().Execute(app);
+            sp.GetRequiredService<ShowOrdersCommand>().Execute();
         }
     }
 }

@@ -1,17 +1,34 @@
 ﻿using Eshop.Core;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Eshop.Menu.Commands
 {
-    internal class ShowCatalogCommand(Type productType) : IMenuCommand
+    internal class ShowCatalogCommand<T>(ApplicationContext context, IServiceProvider serviceProvider) : IMenuCommand where T : SaleItem
     {
-        public string Description { get; } = productType == typeof(Product) ? "Products" : "Services";
+        public string Description { get; } = typeof(T) == typeof(Product) ? "Products" : "Services";
 
-        public void Execute(ApplicationContext app)
+        public void Execute()
         {
-            var previosPage = app.CurrentPage;
-            CatalogPage catalogPage = new(previosPage, [], productType) { SaleItems = productType == typeof(Service) ? app.ServiceManager.GetAll().ToArray() : app.ProductManager.GetAll().ToArray() };
+            var previosPage = context.CurrentPage;
+            CatalogPage catalogPage = new(previosPage, [], typeof(T));
 
-            app.CurrentPage = catalogPage;
+            var saleItemManager = serviceProvider.GetRequiredService<IRepository<T>>();
+
+            catalogPage.SaleItems = [.. saleItemManager.GetAll()];
+
+            context.CurrentPage = catalogPage;
+        }
+
+        public async Task ExecuteAsync(CancellationToken ct = default)
+        {
+            var previosPage = context.CurrentPage;
+            CatalogPage catalogPage = new(previosPage, [], typeof(T));
+
+            var saleItemManager = serviceProvider.GetRequiredService<IRepository<T>>();
+            
+            catalogPage.SaleItems = [.. await saleItemManager.GetAllAsync(ct)];
+
+            context.CurrentPage = catalogPage;
         }
     }
 }

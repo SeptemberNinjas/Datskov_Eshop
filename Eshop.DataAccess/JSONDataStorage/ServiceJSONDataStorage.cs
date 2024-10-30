@@ -18,7 +18,27 @@ namespace Eshop.DataAccess.JSONDataStorage
             return services;
         }
 
+        public Task<IReadOnlyCollection<Service>> GetAllAsync(CancellationToken ct = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Service>? GetByIdAsync(int Id, CancellationToken ct = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> GetCountAsync(CancellationToken ct = default)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Save(Service obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SaveAsync(CancellationToken ct = default)
         {
             throw new NotImplementedException();
         }

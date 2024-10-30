@@ -2,7 +2,7 @@
 
 namespace Eshop.Core
 {
-    public class Service : SaleItem, IStoragedCatalog
+    public class Service : SaleItem
     {
         public override SaleItemType Type => SaleItemType.Service;
 

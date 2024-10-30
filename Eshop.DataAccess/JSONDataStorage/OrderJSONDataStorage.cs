@@ -24,6 +24,21 @@ namespace Eshop.DataAccess.JSONDataStorage
             return orders;
         }
 
+        public Task<IReadOnlyCollection<Order>> GetAllAsync(CancellationToken ct = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Order>? GetByIdAsync(int Id, CancellationToken ct = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> GetCountAsync(CancellationToken ct = default)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Save(Order obj)
         {
             if (!File.Exists(_dirPath))
@@ -34,6 +49,11 @@ namespace Eshop.DataAccess.JSONDataStorage
 
             using var fs = new FileStream(filePath, fileMode);
             JsonSerializer.Serialize(fs, obj);
+        }
+
+        public Task SaveAsync(CancellationToken ct = default)
+        {
+            throw new NotImplementedException();
         }
     }
 }

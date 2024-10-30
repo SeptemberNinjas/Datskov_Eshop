@@ -18,7 +18,27 @@ namespace Eshop.DataAccess.MemmoryDataStorage
             return _products;
         }
 
+        public Task<IReadOnlyCollection<Product>> GetAllAsync(CancellationToken ct = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Product>? GetByIdAsync(int Id, CancellationToken ct = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> GetCountAsync(CancellationToken ct = default)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Save(Product obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SaveAsync(CancellationToken ct = default)
         {
             throw new NotImplementedException();
         }

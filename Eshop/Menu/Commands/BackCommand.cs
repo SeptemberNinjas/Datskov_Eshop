@@ -1,14 +1,12 @@
 ﻿namespace Eshop.Menu.Commands
 {
-    internal class BackCommand : IMenuCommand
+    internal class BackCommand(ApplicationContext context) : IMenuCommand
     {
         public string Description { get; } = "Back";
 
-        public void Execute(ApplicationContext app)
+        public void Execute()
         {
-            var currentPage = app.CurrentPage;
-            if (currentPage.PreviosPage is not null)
-                app.CurrentPage = currentPage.PreviosPage;
+            context.CurrentPage = context.CurrentPage?.PreviosPage ?? context?.CurrentPage ?? new(null, []);
         }
     }
 }

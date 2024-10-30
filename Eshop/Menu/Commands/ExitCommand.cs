@@ -4,7 +4,6 @@
     {
         public string Description { get; } = "Exit";
 
-        public void Execute(ApplicationContext app) => Environment.Exit(0);
-
+        public void Execute() => Environment.Exit(0);
     }
 }

@@ -1,26 +1,27 @@
 ﻿using Eshop.Core;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Eshop.Menu.Commands
 {
-    internal class OrderPayCommand : IMenuCommand
+    internal class OrderPayCommand(ApplicationContext context, IServiceProvider serviceProvider) : IMenuCommand
     {
-        private MenuPage _currentPage = new(null, []);
+        private readonly MenuPage _currentPage = context.CurrentPage;
 
-        private IOrderPayment? _paymentMethod;
+        private IOrderPayment? paymentMethod;
 
         public string Description { get; } = "Payment for the order";
 
-        public void Execute(ApplicationContext app)
+        public void Execute()
         {
-            _currentPage = app.CurrentPage;
+            var orderManager = serviceProvider.GetRequiredService<IRepository<Order>>();
             _currentPage.GetUserInput("Input order number", out int orderNum);
 
-            var order = app.OrderManager.GetById(orderNum);
+            var order = orderManager.GetById(orderNum);
 
             SelectPaymentMethod();
-            if (_paymentMethod is not IOrderPayment paymentMethod)
+            if (paymentMethod is null)
                 return;
-            
+
             paymentMethod.Order = order;
 
             _currentPage.GetUserInput($"Due {paymentMethod.PaymentAmount}, how much money will you give me?", out decimal userInput);
@@ -31,8 +32,8 @@ namespace Eshop.Menu.Commands
             if (result.IsSuccess && order != null)
             {
                 order.Status = OrderStatuses.Paid;
-                app.OrderManager.Save(order);
-                OrdersPage.Orders = [.. app.OrderManager.GetAll()];
+                orderManager.Save(order);
+                OrdersPage.Orders = [.. orderManager.GetAll()];
             }
             _currentPage.InfoMessage = result.ResultDescription;
         }
@@ -53,7 +54,7 @@ namespace Eshop.Menu.Commands
                 _ => throw new NotSupportedException()
             };
 
-            _paymentMethod = paymentMethod;
+            this.paymentMethod = paymentMethod;
         }
     }
 }

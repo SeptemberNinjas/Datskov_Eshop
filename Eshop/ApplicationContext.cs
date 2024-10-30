@@ -3,6 +3,8 @@ using Eshop.DataAccess;
 using Eshop.DataAccess.JSONDataStorage;
 using Eshop.DataAccess.PGDataStorage;
 using Eshop.Menu;
+using Eshop.Menu.Commands;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text.Json;
 
@@ -10,60 +12,72 @@ namespace Eshop
 {
     internal class ApplicationContext
     {
-        private readonly IServiceProvider _sp;
+        private readonly IServiceProvider ServiceProvider;
 
-        internal IRepository<Product> ProductManager { get; }
-        internal IRepository<Service> ServiceManager { get; }
-        internal IRepository<Order> OrderManager { get; }
-
-        internal ApplicationContext()
+        internal ApplicationContext(IConfiguration appconfig)
         {
             var services = new ServiceCollection()
                 .AddScoped<RepositoryFactory, JSONDataStorageFactory>()
+                .AddScoped<IRepository<Product>>(x => new PGDataStorageFactory(appconfig["dbConnectionString"] ?? "").ProductManager())
+                .AddScoped<IRepository<Service>>(x => new PGDataStorageFactory(appconfig["dbConnectionString"] ?? "").ServiceManager())
+                .AddScoped<IRepository<Order>>(x => x.GetRequiredService<RepositoryFactory>().OrderManager())
+                .AddScoped<Cart>(x => GetCart())
+                .AddScoped<ApplicationContext>(x => this)
+                .AddScoped<AddToCartCommand>()
+                .AddScoped<BackCommand>()
+                .AddScoped<ClearCartCommand>()
+                .AddScoped<CreateOrderCommand>()
+                .AddScoped<PreviosProductsCommand>()
+                .AddScoped<NextProductsCommand>()
+                .AddScoped<SetQtyDisplayedCommand>()
+                .AddScoped<ShowCartCommand>()
+                .AddScoped<ShowCatalogChoiceCommand>()
+                .AddScoped<ShowCatalogCommand<Product>>()
+                .AddScoped<ShowCatalogCommand<Service>>()
+                .AddScoped<ShowOrdersCommand>()
+                .AddScoped<OrderPayCommand>()
                 ;
 
-            using var sp = services.BuildServiceProvider();
+            ServiceProvider = services.BuildServiceProvider().CreateScope().ServiceProvider;
+            MenuPage.ServiceProvider = ServiceProvider;
 
-            _sp = sp;
-            var _repositoryFactory = _sp.GetRequiredService<RepositoryFactory>();
-            ProductManager = new PGDataStorageFactory("Server=127.0.0.1;Port=5432;Database=eshop;Username=postgres;Password=password").ProductManager();//_repositoryFactory.ProductManager();
-            ServiceManager = _repositoryFactory.ServiceManager();
-            OrderManager = _repositoryFactory.OrderManager();
+            var mainMenuCommands = new Dictionary<int, IMenuCommand>()
+            {
+                { 1, ServiceProvider.GetRequiredService<ShowCatalogChoiceCommand>() },
+                { 4, ServiceProvider.GetRequiredService<ShowCartCommand>() },
+                { 5, ServiceProvider.GetRequiredService<ShowOrdersCommand>() },
+                { 0, new ExitCommand() }
+            };
+            CurrentPage = new(null, mainMenuCommands);
         }
 
-        internal MenuPage CurrentPage { get; set; } = new(null, []);
-
-        public Cart Cart { get => GetCart(); }
-
-        private Cart? _cart;
+        internal MenuPage CurrentPage { get; set; }
 
         public int GetNewOrderNumber()
         {
-            var lastId = OrderManager.GetAll().MaxBy(x => x.Id)?.Id ?? 0;
+            var lastId = ServiceProvider.GetRequiredService<IRepository<Order>>().GetAll().MaxBy(x => x.Id)?.Id ?? 0;
             return ++lastId;
         }
 
         private Cart GetCart()
         {
-            if (_cart != null)
-                return _cart;
-
             if (!File.Exists("CacheData\\Cart.json"))
                 return new();
 
             using var fs = new FileStream("CacheData\\Cart.json", FileMode.OpenOrCreate);
-            _cart = JsonSerializer.Deserialize<Cart>(fs) ?? new();
-            _cart.CartChangeNotyfy += UpdateCartCache;
+            var cart = JsonSerializer.Deserialize<Cart>(fs) ?? new();
+            cart.CartChangeNotyfy += UpdateCartCache;
 
-            return _cart;
+            return cart;
         }
 
         internal void UpdateCartCache()
         {
-            if (_cart != null)
+            var cart = ServiceProvider.GetRequiredService<Cart>();
+            if (cart != null)
             {
                 using var fs = new FileStream("CacheData\\Cart.json", FileMode.Truncate);
-                JsonSerializer.Serialize(fs, _cart);
+                JsonSerializer.Serialize(fs, cart);
             }
         }
     }

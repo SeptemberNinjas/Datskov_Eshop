@@ -2,7 +2,7 @@
 
 namespace Eshop.Core;
 
-public class Product : SaleItem, IStoragedCatalog
+public class Product : SaleItem
 {
     public uint Stock { get; set; }
 

@@ -1,16 +1,14 @@
 ﻿namespace Eshop.Menu.Commands
 {
-    internal class SetQtyDisplayedCommand : IMenuCommand
+    internal class SetQtyDisplayedCommand(ApplicationContext context) : IMenuCommand
     {
         public string Description { get; } = "Set qty displayed";
 
-        public void Execute(ApplicationContext app)
+        public void Execute()
         {
             int selectedQty;
-            var currentPage = app.CurrentPage;
-
             do
-                currentPage.GetUserInput("Qty (1-5): ", out selectedQty);
+                context.CurrentPage.GetUserInput("Qty (1-5): ", out selectedQty);
             while (selectedQty < 1 || selectedQty > 5);
 
             CatalogPage.ProdQty = selectedQty;

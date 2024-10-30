@@ -1,16 +1,18 @@
-﻿namespace Eshop.Menu.Commands
+﻿using Eshop.Core;
+
+namespace Eshop.Menu.Commands
 {
-    internal class ShowOrdersCommand : IMenuCommand
+    internal class ShowOrdersCommand(ApplicationContext context, IRepository<Order> orderManager) : IMenuCommand
     {
         public string Description { get; } = "Show my orders";
 
-        public void Execute(ApplicationContext app)
+        public void Execute()
         {
-            var previosPage = app.CurrentPage;
-            OrdersPage.Orders = [.. app.OrderManager.GetAll()];
+            var previosPage = context.CurrentPage;
+            OrdersPage.Orders = [.. orderManager.GetAll()];
             OrdersPage ordersPage = new(previosPage, []);
-            
-            app.CurrentPage = ordersPage;
+
+            context.CurrentPage = ordersPage;
         }
     }
 }

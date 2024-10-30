@@ -1,5 +1,5 @@
     create table "catalog"(
-        "id" int not null,
+        "id" serial PRIMARY KEY,
         "name" varchar(500) not null,
         "price" money not null,
         "type" smallint not null,

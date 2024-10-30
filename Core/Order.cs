@@ -1,6 +1,6 @@
 ﻿namespace Eshop.Core
 {
-    public class Order : IStoragedCatalog
+    public class Order : IStoraged
     {
         public int Id { get; }
         public int Number { get => Id; }
