@@ -10,8 +10,7 @@ namespace Eshop.Menu.Commands
 
         public async Task ExecuteAsync()
         {
-            var previosPage = context.CurrentPage;
-            context.CurrentPage = new OrdersPage(previosPage, []) { Orders = [.. await orderManager.GetAllAsync()] };
+            context.CurrentPage = new OrdersPage([]) { Orders = [.. await orderManager.GetAllAsync()] };
         }
     }
 }

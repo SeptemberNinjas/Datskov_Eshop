@@ -6,7 +6,7 @@
 
         public void Execute()
         {
-            context.CurrentPage = context.CurrentPage?.PreviosPage ?? context?.CurrentPage ?? new(null, []);
+            context.OpenPages.Pop();
         }
     }
 }

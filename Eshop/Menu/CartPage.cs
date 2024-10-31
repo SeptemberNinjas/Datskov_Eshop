@@ -6,7 +6,7 @@ namespace Eshop.Menu
 {
     internal class CartPage : MenuPage
     {
-        public CartPage(MenuPage? previosPage, Dictionary<int, IMenuCommand> commands) : base(previosPage, commands)
+        public CartPage(Dictionary<int, IMenuCommand> commands) : base(commands)
         {
             commands.Clear();
             commands.Add(1, ServiceProvider.GetRequiredService<CreateOrderCommand>());

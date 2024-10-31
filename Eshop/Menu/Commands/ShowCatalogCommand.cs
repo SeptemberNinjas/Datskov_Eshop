@@ -10,7 +10,7 @@ namespace Eshop.Menu.Commands
         public void Execute()
         {
             var previosPage = context.CurrentPage;
-            CatalogPage catalogPage = new(previosPage, [], typeof(T));
+            CatalogPage catalogPage = new([], typeof(T));
 
             var saleItemManager = serviceProvider.GetRequiredService<IRepository<T>>();
 
@@ -22,7 +22,7 @@ namespace Eshop.Menu.Commands
         public async Task ExecuteAsync(CancellationToken ct = default)
         {
             var previosPage = context.CurrentPage;
-            CatalogPage catalogPage = new(previosPage, [], typeof(T));
+            CatalogPage catalogPage = new([], typeof(T));
 
             var saleItemManager = serviceProvider.GetRequiredService<IRepository<T>>();
             

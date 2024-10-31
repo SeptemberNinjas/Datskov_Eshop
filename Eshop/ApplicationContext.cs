@@ -48,10 +48,11 @@ namespace Eshop
                 { 5, ServiceProvider.GetRequiredService<ShowOrdersCommand>() },
                 { 0, new ExitCommand() }
             };
-            CurrentPage = new(null, mainMenuCommands);
+            CurrentPage = new(mainMenuCommands);
         }
+        internal Stack<MenuPage> OpenPages = new();
 
-        internal MenuPage CurrentPage { get; set; }
+        internal MenuPage CurrentPage { get => OpenPages.Peek(); set => OpenPages.Push(value); }
 
         public int GetNewOrderNumber()
         {

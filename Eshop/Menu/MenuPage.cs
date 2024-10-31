@@ -2,11 +2,10 @@
 
 namespace Eshop.Menu
 {
-    internal class MenuPage(MenuPage? previosPage, Dictionary<int, IMenuCommand> commands)
+    internal class MenuPage(Dictionary<int, IMenuCommand> commands)
     {
         public static IServiceProvider ServiceProvider;
         
-        public MenuPage? PreviosPage { get; } = previosPage;
         public string InfoMessage { get; set; } = string.Empty;
         private readonly Dictionary<int, IMenuCommand> _commands = commands;
 

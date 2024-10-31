@@ -15,7 +15,7 @@ namespace Eshop.Menu
 
         public SaleItem[] SaleItems = [];
 
-        public CatalogPage(MenuPage? previosPage, Dictionary<int, IMenuCommand> commands, Type saleItemType, int pageNum = 1) : base(previosPage, commands)
+        public CatalogPage(Dictionary<int, IMenuCommand> commands, Type saleItemType, int pageNum = 1) : base(commands)
         {
             commands.Clear();
             commands.Add(1, ServiceProvider.GetRequiredService<PreviosProductsCommand>());
@@ -53,8 +53,8 @@ namespace Eshop.Menu
                     PageNum--;
                     Show();
                 }
-                else
-                    PreviosPage?.Show();
+                //else
+                    //PreviosPage?.Show();
 
                 return;
             }

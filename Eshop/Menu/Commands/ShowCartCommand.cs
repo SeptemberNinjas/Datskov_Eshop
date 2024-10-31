@@ -6,7 +6,7 @@
 
         public void Execute()
         {
-            context.CurrentPage = new CartPage(context.CurrentPage, []);
+            context.CurrentPage = new CartPage([]);
         }
     }
 }

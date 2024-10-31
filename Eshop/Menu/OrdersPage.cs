@@ -7,7 +7,7 @@ namespace Eshop.Menu
     internal class OrdersPage : MenuPage
     {
         public Order[] Orders { get; set; } = [];
-        public OrdersPage(MenuPage? previosPage, Dictionary<int, IMenuCommand> commands) : base(previosPage, commands)
+        public OrdersPage(Dictionary<int, IMenuCommand> commands) : base(commands)
         {
             commands.Add(1, ServiceProvider.GetRequiredService<OrderPayCommand>());
             commands.Add(0, ServiceProvider.GetRequiredService<BackCommand>());

@@ -16,7 +16,7 @@ namespace Eshop.Menu.Commands
                 { 0, sp.GetRequiredService<BackCommand>() }
             };
 
-            context.CurrentPage = new(context.CurrentPage, catCommands);
+            context.CurrentPage = new(catCommands);
         }
     }
 }
