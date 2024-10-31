@@ -36,12 +36,13 @@
         (7, 10);
 
     create table "orders"(
-        "id" int not null,
+        "id" int PRIMARY KEY,
         "status" int not null
         );
 
-    create table "orderLines"(
-        "saleItemId" int not null,
+    create table "order_lines"(
+        "id" int not null,
+        "saleitemid" int not null,
         "price" money not null,
         "count" int not null        
     );

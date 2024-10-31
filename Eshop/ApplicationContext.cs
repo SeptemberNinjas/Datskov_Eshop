@@ -1,6 +1,5 @@
 ﻿using Eshop.Core;
 using Eshop.DataAccess;
-using Eshop.DataAccess.JSONDataStorage;
 using Eshop.DataAccess.PGDataStorage;
 using Eshop.Menu;
 using Eshop.Menu.Commands;
@@ -17,10 +16,10 @@ namespace Eshop
         internal ApplicationContext(IConfiguration appconfig)
         {
             var services = new ServiceCollection()
-                .AddScoped<RepositoryFactory, JSONDataStorageFactory>()
-                .AddScoped<IRepository<Product>>(x => new PGDataStorageFactory(appconfig["dbConnectionString"] ?? "").ProductManager())
-                .AddScoped<IRepository<Service>>(x => new PGDataStorageFactory(appconfig["dbConnectionString"] ?? "").ServiceManager())
-                .AddScoped<IRepository<Order>>(x => new PGDataStorageFactory(appconfig["dbConnectionString"] ?? "").OrderManager())
+                .AddSingleton<RepositoryFactory>(x => new PGDataStorageFactory(appconfig["dbConnectionString"] ?? ""))
+                .AddScoped<IRepository<Product>>(x => x.GetRequiredService<RepositoryFactory>().ProductManager())
+                .AddScoped<IRepository<Service>>(x => x.GetRequiredService<RepositoryFactory>().ServiceManager())
+                .AddScoped<IRepository<Order>>(x => x.GetRequiredService<RepositoryFactory>().OrderManager())
                 .AddScoped<Cart>(x => GetCart())
                 .AddScoped<ApplicationContext>(x => this)
                 .AddScoped<AddToCartCommand>()
