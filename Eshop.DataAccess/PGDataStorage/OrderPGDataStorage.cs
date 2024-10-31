@@ -63,9 +63,28 @@ namespace Eshop.DataAccess.PGDataStorage
             return order;
         }
 
-        public Task<Order>? GetByIdAsync(int Id, CancellationToken ct = default)
+        public async Task<Order>? GetByIdAsync(int Id, CancellationToken ct = default)
         {
-            throw new NotImplementedException();
+            var query =
+                $@"SELECT 
+                    o.id,
+                    o.status,
+                    Array(SELECT 
+                            row_to_json(t)
+                        FROM (SELECT 
+                                ol.saleitemid,
+                                ol.price,
+                                ol.count
+                              FROM 
+                                order_lines ol 
+                              WHERE 
+                                o.id = ol.id) as t ) as lines
+                FROM 
+                    orders o 
+                WHERE id = {Id}";
+
+            var list = await ExecuteReaderListAsync<Order>(query, ct, GetOrder);
+            return list.FirstOrDefault(x => x.Id == Id)!;
         }
 
         public Task<int> GetCountAsync(CancellationToken ct = default)

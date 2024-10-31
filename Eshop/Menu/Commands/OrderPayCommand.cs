@@ -1,12 +1,10 @@
 ﻿using Eshop.Core;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Eshop.Menu.Commands
 {
-    internal class OrderPayCommand(ApplicationContext context, IServiceProvider sp) : IMenuCommand
+    internal class OrderPayCommand(ApplicationContext context, IRepository<Order> orderManager) : IMenuCommand
     {
-        private readonly MenuPage _currentPage = context.CurrentPage;
-
+        
         private IOrderPayment? paymentMethod;
 
         public string Description { get; } = "Payment for the order";
@@ -15,10 +13,11 @@ namespace Eshop.Menu.Commands
         
         public async Task ExecuteAsync() 
         {
-            var orderManager = sp.GetRequiredService<IRepository<Order>>();
-            _currentPage.GetUserInput("Input order number", out int orderNum);
+            var currentPage = context.CurrentPage;
 
-            var order = orderManager.GetById(orderNum);
+            currentPage.GetUserInput("Input order number", out int orderNum);
+
+            var order = await orderManager.GetByIdAsync(orderNum)!;
 
             SelectPaymentMethod();
             if (paymentMethod is null)
@@ -26,7 +25,7 @@ namespace Eshop.Menu.Commands
 
             paymentMethod.Order = order;
 
-            _currentPage.GetUserInput($"Due {paymentMethod.PaymentAmount}, how much money will you give me?", out decimal userInput);
+            currentPage.GetUserInput($"Due {paymentMethod.PaymentAmount}, how much money will you give me?", out decimal userInput);
 
             paymentMethod.ReceivedAmount = userInput;
             paymentMethod.MakePayment(out var result);
@@ -35,10 +34,10 @@ namespace Eshop.Menu.Commands
             {
                 order.Status = OrderStatuses.Paid;
                 await orderManager.SaveAsync(order);
-                if (_currentPage is OrdersPage ordPage)
+                if (currentPage is OrdersPage ordPage)
                     ordPage.Orders = [.. await orderManager.GetAllAsync()];
             }
-            _currentPage.InfoMessage = result.ResultDescription;
+            currentPage.InfoMessage = result.ResultDescription;
         }
 
         private void SelectPaymentMethod()
@@ -48,7 +47,7 @@ namespace Eshop.Menu.Commands
                 "   1 - Cash, " + Environment.NewLine +
                 "   2 - CashLess ";
             do
-                _currentPage.GetUserInput(inputMessage, out userInput);
+                context.CurrentPage.GetUserInput(inputMessage, out userInput);
             while (userInput != 1 && userInput != 2);
 
             IOrderPayment paymentMethod = userInput switch

@@ -4,6 +4,11 @@ namespace Eshop.DataAccess.MemmoryDataStorage
 {
     public class MemmoryDataStorageFactory : RepositoryFactory
     {
+        public override IRepository<Cart> CartManager()
+        {
+            throw new NotImplementedException();
+        }
+
         public override IRepository<Order> OrderManager()
         {
             return new OrderMemmoryDataStorage();

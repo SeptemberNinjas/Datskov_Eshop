@@ -70,10 +70,10 @@ namespace Eshop.DataAccess.PGDataStorage
                 from 
                     catalog c
                         left join stock s 
-                        on c.Id = s.Id
+                        on c.id = s.id
                 where 
                     type = 1
-                    and Id = {Id}";
+                    and c.id = {Id}";
 
             var list = await ExecuteReaderListAsync<Product>(query, ct, GetProduct);
             return list.FirstOrDefault(x => x.Id == Id)!;

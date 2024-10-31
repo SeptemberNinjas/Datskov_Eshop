@@ -18,6 +18,10 @@ namespace Eshop.DataAccess.JSONDataStorage
         {
             return new OrderJSONDataStorage();
         }
-        
+
+        public override IRepository<Cart> CartManager()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
