@@ -38,7 +38,7 @@ namespace Eshop.DataAccess.MemmoryDataStorage
             throw new NotImplementedException();
         }
 
-        public Task SaveAsync(CancellationToken ct = default)
+        public Task SaveAsync(Product obj, CancellationToken ct = default)
         {
             throw new NotImplementedException();
         }

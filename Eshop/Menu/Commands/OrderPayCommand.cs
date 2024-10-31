@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Eshop.Menu.Commands
 {
-    internal class OrderPayCommand(ApplicationContext context, IServiceProvider serviceProvider) : IMenuCommand
+    internal class OrderPayCommand(ApplicationContext context, IServiceProvider sp) : IMenuCommand
     {
         private readonly MenuPage _currentPage = context.CurrentPage;
 
@@ -11,9 +11,11 @@ namespace Eshop.Menu.Commands
 
         public string Description { get; } = "Payment for the order";
 
-        public void Execute()
+        public void Execute() => ExecuteAsync().Wait();
+        
+        public async Task ExecuteAsync() 
         {
-            var orderManager = serviceProvider.GetRequiredService<IRepository<Order>>();
+            var orderManager = sp.GetRequiredService<IRepository<Order>>();
             _currentPage.GetUserInput("Input order number", out int orderNum);
 
             var order = orderManager.GetById(orderNum);
@@ -32,11 +34,13 @@ namespace Eshop.Menu.Commands
             if (result.IsSuccess && order != null)
             {
                 order.Status = OrderStatuses.Paid;
-                orderManager.Save(order);
-                OrdersPage.Orders = [.. orderManager.GetAll()];
+                await orderManager.SaveAsync(order);
+                if (_currentPage is OrdersPage ordPage)
+                    ordPage.Orders = [.. await orderManager.GetAllAsync()];
             }
             _currentPage.InfoMessage = result.ResultDescription;
         }
+
         private void SelectPaymentMethod()
         {
             int userInput;

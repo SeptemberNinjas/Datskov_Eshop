@@ -38,7 +38,7 @@ namespace Eshop.DataAccess.JSONDataStorage
             throw new NotImplementedException();
         }
 
-        public Task SaveAsync(CancellationToken ct = default)
+        public Task SaveAsync(Service obj, CancellationToken ct = default)
         {
             throw new NotImplementedException();
         }

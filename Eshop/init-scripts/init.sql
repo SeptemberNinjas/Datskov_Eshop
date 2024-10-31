@@ -34,3 +34,14 @@
         (5, 5),
         (6, 10),
         (7, 10);
+
+    create table "orders"(
+        "id" int not null,
+        "status" int not null
+        );
+
+    create table "orderLines"(
+        "saleItemId" int not null,
+        "price" money not null,
+        "count" int not null        
+    );

@@ -51,7 +51,7 @@ namespace Eshop.DataAccess.JSONDataStorage
             JsonSerializer.Serialize(fs, obj);
         }
 
-        public Task SaveAsync(CancellationToken ct = default)
+        public Task SaveAsync(Order obj, CancellationToken ct = default)
         {
             throw new NotImplementedException();
         }

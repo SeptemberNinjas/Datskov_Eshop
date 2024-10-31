@@ -66,5 +66,13 @@ namespace Eshop.DataAccess.PGDataStorage
 
             return result;
         }
+        protected async Task<int> ExecuteNonQueryAsync(string query, CancellationToken ct)
+        {
+            using var connection = await GetConnectionAsync(ct);
+
+            var command = GetCommand(query);
+
+            return await command.ExecuteNonQueryAsync(ct);
+        }
     }
 }

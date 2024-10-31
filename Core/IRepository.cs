@@ -13,7 +13,7 @@
 
         public Task<int> GetCountAsync(CancellationToken ct = default);
 
-        public Task SaveAsync(CancellationToken ct = default);
+        public Task SaveAsync(T obj, CancellationToken ct = default);
 
     }
 }

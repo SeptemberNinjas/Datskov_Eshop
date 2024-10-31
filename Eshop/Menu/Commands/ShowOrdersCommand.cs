@@ -6,13 +6,12 @@ namespace Eshop.Menu.Commands
     {
         public string Description { get; } = "Show my orders";
 
-        public void Execute()
+        public void Execute() => ExecuteAsync().Wait();
+
+        public async Task ExecuteAsync()
         {
             var previosPage = context.CurrentPage;
-            OrdersPage.Orders = [.. orderManager.GetAll()];
-            OrdersPage ordersPage = new(previosPage, []);
-
-            context.CurrentPage = ordersPage;
+            context.CurrentPage = new OrdersPage(previosPage, []) { Orders = [.. await orderManager.GetAllAsync()] };
         }
     }
 }

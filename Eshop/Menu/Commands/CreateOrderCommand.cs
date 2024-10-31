@@ -7,7 +7,9 @@ namespace Eshop.Menu.Commands
     {
         public string Description { get; } = "Create order";
 
-        public void Execute()
+        public void Execute() => ExecuteAsync().Wait();
+
+        public async Task ExecuteAsync()
         {
             if (cart.Count == 0)
             {
@@ -19,17 +21,15 @@ namespace Eshop.Menu.Commands
             foreach (var cartItem in cart.Items)
             {
                 var orderLine = order.Add();
-                orderLine.Product = cartItem.Product;
+                orderLine.SaleItemId = cartItem.Product?.Id ?? cartItem.Service?.Id ?? 0;
                 orderLine.Price = cartItem.Price;
-                orderLine.Service = cartItem.Service;
                 orderLine.Count = cartItem.Count;
-                orderLine.Amount = cartItem.Amount;
             }
 
-            sp.GetRequiredService<IRepository<Order>>().Save(order);
+            await sp.GetRequiredService<IRepository<Order>>().SaveAsync(order);
             cart.Clear();
 
-            sp.GetRequiredService<ShowOrdersCommand>().Execute();
+            await sp.GetRequiredService<ShowOrdersCommand>().ExecuteAsync();
         }
     }
 }

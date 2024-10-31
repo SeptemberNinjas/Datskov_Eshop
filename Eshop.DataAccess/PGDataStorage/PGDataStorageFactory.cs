@@ -8,10 +8,7 @@ namespace Eshop.DataAccess.PGDataStorage
         
         public PGDataStorageFactory(string connectionString) => _connectionString = connectionString;
 
-        public override IRepository<Order> OrderManager()
-        {
-            throw new NotImplementedException();
-        }
+        public override IRepository<Order> OrderManager() => new OrderPGDataStorage(_connectionString);
 
         public override IRepository<Product> ProductManager() => new ProductPGDataStorage(_connectionString);
 

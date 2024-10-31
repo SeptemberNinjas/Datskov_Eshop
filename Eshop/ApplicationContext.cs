@@ -20,7 +20,7 @@ namespace Eshop
                 .AddScoped<RepositoryFactory, JSONDataStorageFactory>()
                 .AddScoped<IRepository<Product>>(x => new PGDataStorageFactory(appconfig["dbConnectionString"] ?? "").ProductManager())
                 .AddScoped<IRepository<Service>>(x => new PGDataStorageFactory(appconfig["dbConnectionString"] ?? "").ServiceManager())
-                .AddScoped<IRepository<Order>>(x => x.GetRequiredService<RepositoryFactory>().OrderManager())
+                .AddScoped<IRepository<Order>>(x => new PGDataStorageFactory(appconfig["dbConnectionString"] ?? "").OrderManager())
                 .AddScoped<Cart>(x => GetCart())
                 .AddScoped<ApplicationContext>(x => this)
                 .AddScoped<AddToCartCommand>()
