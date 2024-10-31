@@ -46,3 +46,8 @@
         "price" money not null,
         "count" int not null        
     );
+
+    create table "cart_lines"(
+        "saleitemid" int not null,
+        "count" int not null
+    )

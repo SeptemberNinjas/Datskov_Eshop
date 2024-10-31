@@ -18,7 +18,7 @@ namespace Eshop.DataAccess.PGDataStorage
                 where 
                     type = 2
                 order by 
-                    Id");
+                    id");
 
             using var reader = command.ExecuteReader();
 
@@ -42,7 +42,7 @@ namespace Eshop.DataAccess.PGDataStorage
                 where 
                     type = 2
                 order by 
-                    Id";
+                    id";
 
             return await ExecuteReaderListAsync<Service>(query, ct, GetService);
         }
@@ -65,7 +65,7 @@ namespace Eshop.DataAccess.PGDataStorage
                     catalog c
                 where 
                     type = 2
-                    and Id = {Id}";
+                    and id = {Id}";
 
             var list = await ExecuteReaderListAsync<Service>(query, ct, GetService);
             return list.FirstOrDefault(x => x.Id == Id)!;

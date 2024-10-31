@@ -13,5 +13,7 @@ namespace Eshop.DataAccess.PGDataStorage
         public override IRepository<Product> ProductManager() => new ProductPGDataStorage(_connectionString);
 
         public override IRepository<Service> ServiceManager() => new ServicePGDataStorage(_connectionString);
+
+        public override IRepository<Cart> CartManager() => new CartPGDataStorage(_connectionString, ProductManager(), ServiceManager());
     }
 }

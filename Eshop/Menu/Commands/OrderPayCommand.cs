@@ -18,7 +18,7 @@ namespace Eshop.Menu.Commands
             var orderManager = sp.GetRequiredService<IRepository<Order>>();
             _currentPage.GetUserInput("Input order number", out int orderNum);
 
-            var order = orderManager.GetById(orderNum);
+            var order = await orderManager.GetByIdAsync(orderNum)!;
 
             SelectPaymentMethod();
             if (paymentMethod is null)
