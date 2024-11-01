@@ -66,10 +66,7 @@ namespace Eshop
         {
             var cart = ServiceProvider.GetRequiredService<Cart>();
             if (cart != null)
-            {
-                var cartManager = ServiceProvider.GetRequiredService<IRepository<Cart>>();
-                await cartManager.SaveAsync(cart);
-            }
+                await ServiceProvider.GetRequiredService<IRepository<Cart>>().SaveAsync(cart);
         }
     }
 }
