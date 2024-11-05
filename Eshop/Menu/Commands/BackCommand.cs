@@ -4,9 +4,6 @@
     {
         public string Description { get; } = "Back";
 
-        public void Execute()
-        {
-            context.OpenPages.Pop();
-        }
+        public void Execute() => context.OpenPages.Pop();
     }
 }

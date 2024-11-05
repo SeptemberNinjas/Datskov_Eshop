@@ -1,9 +1,12 @@
 ﻿using Eshop.Core;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Eshop.Menu.Commands
 {
-    internal class ShowCatalogChoiceCommand(ApplicationContext context, IServiceProvider sp) : IMenuCommand
+    internal class ShowCatalogChoiceCommand(
+        ApplicationContext context,
+        ShowCatalogCommand<Product> showProductCommand,
+        ShowCatalogCommand<Service> showServiceCommand,
+        BackCommand backCommand) : IMenuCommand
     {
         public string Description { get; } = "Show catalog";
 
@@ -11,9 +14,9 @@ namespace Eshop.Menu.Commands
         {
             Dictionary<int, IMenuCommand> catCommands = new()
             {
-                { 1, sp.GetRequiredService<ShowCatalogCommand<Product>>() },
-                { 2, sp.GetRequiredService<ShowCatalogCommand<Service>>() },
-                { 0, sp.GetRequiredService<BackCommand>() }
+                { 1, showProductCommand },
+                { 2, showServiceCommand },
+                { 0, backCommand }
             };
 
             context.CurrentPage = new(catCommands);

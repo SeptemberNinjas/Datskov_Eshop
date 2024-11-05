@@ -2,7 +2,7 @@
 
 namespace Eshop.Menu.Commands
 {
-    internal class OrderPayCommand(ApplicationContext context, IRepository<Order> orderManager) : IMenuCommand
+    internal class OrderPayCommand(ApplicationContext context, IRepository<Order> orderRepository) : IMenuCommand
     {
         
         private IOrderPayment? paymentMethod;
@@ -17,7 +17,7 @@ namespace Eshop.Menu.Commands
 
             currentPage.GetUserInput("Input order number", out int orderNum);
 
-            var order = await orderManager.GetByIdAsync(orderNum)!;
+            var order = await orderRepository.GetByIdAsync(orderNum)!;
 
             SelectPaymentMethod();
             if (paymentMethod is null)
@@ -33,9 +33,9 @@ namespace Eshop.Menu.Commands
             if (result.IsSuccess && order != null)
             {
                 order.Status = OrderStatuses.Paid;
-                await orderManager.SaveAsync(order);
+                await orderRepository.SaveAsync(order);
                 if (currentPage is OrdersPage ordPage)
-                    ordPage.Orders = [.. await orderManager.GetAllAsync()];
+                    ordPage.Orders = [.. await orderRepository.GetAllAsync()];
             }
             currentPage.InfoMessage = result.ResultDescription;
         }

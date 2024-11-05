@@ -1,9 +1,12 @@
 ﻿using Eshop.Core;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Eshop.Menu.Commands
 {
-    internal class CreateOrderCommand(IServiceProvider sp, Cart cart, ApplicationContext context) : IMenuCommand
+    internal class CreateOrderCommand(
+        ApplicationContext context,
+        IRepository<Order> orderRepository,
+        ShowOrdersCommand showOrdersCommand,
+        Cart cart) : IMenuCommand
     {
         public string Description { get; } = "Create order";
 
@@ -26,10 +29,10 @@ namespace Eshop.Menu.Commands
                 orderLine.Count = cartItem.Count;
             }
 
-            await sp.GetRequiredService<IRepository<Order>>().SaveAsync(order);
+            await orderRepository.SaveAsync(order);
             cart.Clear();
 
-            await sp.GetRequiredService<ShowOrdersCommand>().ExecuteAsync();
+            await showOrdersCommand.ExecuteAsync();
         }
     }
 }

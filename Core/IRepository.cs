@@ -9,7 +9,7 @@
 
         public Task<IReadOnlyCollection<T>> GetAllAsync(CancellationToken ct = default);
 
-        public Task<T>? GetByIdAsync(int Id, CancellationToken ct = default);
+        public Task<T?> GetByIdAsync(int Id, CancellationToken ct = default);
 
         public Task<int> GetCountAsync(CancellationToken ct = default);
 

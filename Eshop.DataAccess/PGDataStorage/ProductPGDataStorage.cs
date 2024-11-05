@@ -61,7 +61,7 @@ namespace Eshop.DataAccess.PGDataStorage
                     reader.GetFieldValue<string>("description"));
         }
 
-        public async Task<Product>? GetByIdAsync(int Id, CancellationToken ct = default)
+        public async Task<Product?> GetByIdAsync(int Id, CancellationToken ct = default)
         {
             var query =
                 $@"select 
