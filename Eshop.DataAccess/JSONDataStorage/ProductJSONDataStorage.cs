@@ -16,20 +16,13 @@ namespace Eshop.DataAccess.JSONDataStorage
             return (IReadOnlyCollection<Product>)(products ?? []);
         }
 
-        public Task<IReadOnlyCollection<Product>> GetAllAsync(CancellationToken ct = default)
-        {
-            throw new NotImplementedException();
-        }
+        public Task<IReadOnlyCollection<Product>> GetAllAsync(CancellationToken ct = default) => Task.FromResult(GetAll());
 
-        public Task<Product>? GetByIdAsync(int Id, CancellationToken ct = default)
-        {
-            throw new NotImplementedException();
-        }
+        public Product? GetById(int id) => GetAll().FirstOrDefault(x => x.Id == id);
 
-        public Task<int> GetCountAsync(CancellationToken ct = default)
-        {
-            throw new NotImplementedException();
-        }
+        public Task<Product?> GetByIdAsync(int id, CancellationToken ct = default) => Task.FromResult(GetById(id));
+
+        public Task<int> GetCountAsync(CancellationToken ct = default) => Task.FromResult(GetAll().Count);
 
         public void Save(Product obj)
         {

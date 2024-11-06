@@ -7,31 +7,22 @@ namespace Eshop.DataAccess.JSONDataStorage
     {
         public IReadOnlyCollection<Service> GetAll()
         {
-            Service[]? services;
+            IEnumerable<Service>? services;
             using (var fs = new FileStream("JSONDataStorage\\data\\Services.json", FileMode.OpenOrCreate))
             {
-                services = JsonSerializer.Deserialize<Service[]>(fs);
+                services = JsonSerializer.Deserialize<IEnumerable<Service>>(fs);
             }
 
-            services ??= [];
-
-            return services;
+            return (IReadOnlyCollection<Service>)(services ?? []);
         }
 
-        public Task<IReadOnlyCollection<Service>> GetAllAsync(CancellationToken ct = default)
-        {
-            throw new NotImplementedException();
-        }
+        public Task<IReadOnlyCollection<Service>> GetAllAsync(CancellationToken ct = default) => Task.FromResult(GetAll());
 
-        public Task<Service>? GetByIdAsync(int Id, CancellationToken ct = default)
-        {
-            throw new NotImplementedException();
-        }
+        public Service? GetById(int id) => GetAll().FirstOrDefault(x => x.Id == id);
 
-        public Task<int> GetCountAsync(CancellationToken ct = default)
-        {
-            throw new NotImplementedException();
-        }
+        public Task<Service?> GetByIdAsync(int id, CancellationToken ct = default) => Task.FromResult(GetById(id));
+        
+        public Task<int> GetCountAsync(CancellationToken ct = default) => Task.FromResult(GetAll().Count);
 
         public void Save(Service obj)
         {

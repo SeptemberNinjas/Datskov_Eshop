@@ -14,7 +14,12 @@ namespace Eshop.DataAccess.MemmoryDataStorage
             throw new NotImplementedException();
         }
 
-        public Task<Order>? GetByIdAsync(int Id, CancellationToken ct = default)
+        public Order? GetById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Order?> GetByIdAsync(int Id, CancellationToken ct = default)
         {
             throw new NotImplementedException();
         }

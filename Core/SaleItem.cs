@@ -1,6 +1,6 @@
 ﻿namespace Eshop.Core
 {
-    public abstract class SaleItem : IStoraged
+    public abstract class SaleItem
     {
         public int Id { get; }
         public string Name { get; set; }

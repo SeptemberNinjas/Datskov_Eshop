@@ -1,6 +1,6 @@
 ﻿namespace Eshop.Core
 {
-    public class Cart : IStoraged
+    public class Cart
     {
         public delegate void CartChangeHandler();
         public event CartChangeHandler? CartChangeNotyfy;
@@ -8,8 +8,6 @@
         public List<CartItem> Items { get; set; } = [];
         public uint Count { get => (uint)Items.Sum(item => item.Count); }
         public decimal TotalAmount { get => Items.Sum(item => item.Amount); }
-
-        public int Id => 0;
 
         public string Add(Product product, uint count)
         {

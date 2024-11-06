@@ -24,20 +24,13 @@ namespace Eshop.DataAccess.JSONDataStorage
             return orders;
         }
 
-        public Task<IReadOnlyCollection<Order>> GetAllAsync(CancellationToken ct = default)
-        {
-            throw new NotImplementedException();
-        }
+        public Task<IReadOnlyCollection<Order>> GetAllAsync(CancellationToken ct = default) => Task.FromResult(GetAll());
 
-        public Task<Order>? GetByIdAsync(int Id, CancellationToken ct = default)
-        {
-            throw new NotImplementedException();
-        }
+        public Order? GetById(int id) => GetAll().FirstOrDefault(x => x.Id == id);
 
-        public Task<int> GetCountAsync(CancellationToken ct = default)
-        {
-            throw new NotImplementedException();
-        }
+        public Task<Order?> GetByIdAsync(int id, CancellationToken ct = default) => Task.FromResult(GetById(id));
+
+        public Task<int> GetCountAsync(CancellationToken ct = default) => Task.FromResult(GetAll().Count);
 
         public void Save(Order obj)
         {
@@ -53,7 +46,9 @@ namespace Eshop.DataAccess.JSONDataStorage
 
         public Task SaveAsync(Order obj, CancellationToken ct = default)
         {
-            throw new NotImplementedException();
+            Save(obj);
+            return Task.CompletedTask;
         }
+
     }
 }

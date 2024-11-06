@@ -10,7 +10,7 @@
         {
             result = new();
 
-            if (Order != null)
+            if (Order is null)
                 result.ResultDescription = "Order not found!";
 
             if (Order?.Status != OrderStatuses.New)

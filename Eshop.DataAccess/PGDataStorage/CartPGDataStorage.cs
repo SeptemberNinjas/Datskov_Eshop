@@ -4,7 +4,9 @@ using System.Text;
 
 namespace Eshop.DataAccess.PGDataStorage
 {
-    public class CartPGDataStorage(string connectionString, IRepository<Product> ProductManager, IRepository<Service> ServiceManager) : DBContext(connectionString), IRepository<Cart>
+    public class CartPGDataStorage(string connectionString, 
+        IRepository<Product> ProductManager, 
+        IRepository<Service> ServiceManager) : DBContext(connectionString), IRepository<Cart>
     {
         public IReadOnlyCollection<Cart> GetAll() => GetAllAsync().Result;
 
@@ -49,20 +51,13 @@ namespace Eshop.DataAccess.PGDataStorage
             return result;
         }
 
-        public Task<Cart>? GetByIdAsync(int Id, CancellationToken ct = default)
-        {
-            throw new NotImplementedException();
-        }
+        public Cart? GetById(int id) => GetAllAsync().Result.FirstOrDefault();
 
-        public Task<int> GetCountAsync(CancellationToken ct = default)
-        {
-            throw new NotImplementedException();
-        }
+        public Task<Cart?> GetByIdAsync(int Id, CancellationToken ct = default) => Task.FromResult(GetAllAsync(ct).Result.FirstOrDefault());
 
-        public void Save(Cart obj)
-        {
-            throw new NotImplementedException();
-        }
+        public Task<int> GetCountAsync(CancellationToken ct = default) => Task.FromResult(GetAllAsync(ct).Result.Count);
+
+        public void Save(Cart obj) => SaveAsync(obj).Wait();
 
         public async Task SaveAsync(Cart obj, CancellationToken ct = default)
         {
@@ -95,7 +90,6 @@ namespace Eshop.DataAccess.PGDataStorage
                 END$$;";
 
             await ExecuteNonQueryAsync(query, ct);
-
         }
     }
 }

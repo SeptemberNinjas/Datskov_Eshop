@@ -63,7 +63,9 @@ namespace Eshop.DataAccess.PGDataStorage
             return order;
         }
 
-        public async Task<Order>? GetByIdAsync(int Id, CancellationToken ct = default)
+        public Order? GetById(int id) => GetByIdAsync(id).Result;
+        
+        public async Task<Order?> GetByIdAsync(int id, CancellationToken ct = default)
         {
             var query =
                 $@"SELECT 
@@ -81,10 +83,10 @@ namespace Eshop.DataAccess.PGDataStorage
                                 o.id = ol.id) as t ) as lines
                 FROM 
                     orders o 
-                WHERE id = {Id}";
+                WHERE id = {id}";
 
             var list = await ExecuteReaderListAsync<Order>(query, ct, GetOrder);
-            return list.FirstOrDefault(x => x.Id == Id)!;
+            return list.FirstOrDefault(x => x.Id == id)!;
         }
 
         public Task<int> GetCountAsync(CancellationToken ct = default)

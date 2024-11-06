@@ -61,7 +61,9 @@ namespace Eshop.DataAccess.PGDataStorage
                     reader.GetFieldValue<string>("description"));
         }
 
-        public async Task<Product?> GetByIdAsync(int Id, CancellationToken ct = default)
+        public Product? GetById(int id) => GetByIdAsync(id).Result; 
+        
+        public async Task<Product?> GetByIdAsync(int id, CancellationToken ct = default)
         {
             var query =
                 $@"select 
@@ -73,10 +75,10 @@ namespace Eshop.DataAccess.PGDataStorage
                         on c.id = s.id
                 where 
                     type = 1
-                    and c.id = {Id}";
+                    and c.id = {id}";
 
             var list = await ExecuteReaderListAsync<Product>(query, ct, GetProduct);
-            return list.FirstOrDefault(x => x.Id == Id)!;
+            return list.FirstOrDefault(x => x.Id == id)!;
         }
 
         public async Task<int> GetCountAsync(CancellationToken ct = default)
