@@ -1,10 +1,15 @@
-﻿namespace Eshop.Core;
+﻿using System.Text.Json.Serialization;
+
+namespace Eshop.Core;
 
 public class Product : SaleItem
 {
     public uint Stock { get; set; }
 
-    public Product(int id, string name, decimal price, uint stock) : base(id, name, price)
+    public override SaleItemType Type => SaleItemType.Product;
+
+    [JsonConstructor]
+    public Product(int id, string name, decimal price, uint stock) : base(id, name, price) 
     {
         Stock = stock;
     }

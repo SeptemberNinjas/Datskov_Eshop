@@ -1,14 +1,12 @@
 ﻿namespace Eshop.Menu.Commands
 {
-    internal class PreviosProductsCommand : IMenuCommand
+    internal class PreviosProductsCommand(ApplicationContext context) : IMenuCommand
     {
         public string Description { get; } = "Previos page";
 
-        public void Execute(ApplicationContext app)
+        public void Execute()
         {
-            var currentPage = app.CurrentPage;
-
-            if (currentPage is CatalogPage catPage && catPage.PageNum > 1)
+            if (context.CurrentPage is CatalogPage catPage && catPage.PageNum > 1)
                 catPage.PageNum--;
         }
     }

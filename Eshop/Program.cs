@@ -1,26 +1,21 @@
-﻿using Eshop.Menu.Commands;
+﻿using Microsoft.Extensions.Configuration;
 
 namespace Eshop
 {
     internal class Program
     {
-        private static readonly ApplicationContext _context = new();
-
-        internal static Dictionary<int, IMenuCommand> mainMenuCommands = new()
-            {
-                { 1, new ShowCatalogChoiceCommand() },
-                { 4, new ShowCartCommand() },
-                { 5, new ShowOrdersCommand() },
-                { 0, new ExitCommand() }
-            };
-
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
-            _context.CurrentPage = new(null, mainMenuCommands);
+            var appconfig = new ConfigurationBuilder()
+                    .AddJsonFile("config.json", optional: false)
+                    .Build();
+
+            var context = new ApplicationContext(appconfig);
+
             while (true)
             {
-                var command = _context.CurrentPage.Show();
-                command.Execute(_context);
+                var command = context.CurrentPage.Show();
+                await command.ExecuteAsync();
             }
         }
     }

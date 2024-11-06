@@ -1,10 +1,11 @@
 ﻿using Eshop.Core;
 using Eshop.Menu.Commands;
+using Microsoft.Extensions.DependencyInjection;
 using System.Text;
 
 namespace Eshop.Menu
 {
-    internal class CatalogPage : MenuPage
+    internal class CatalogPage : MenuPage 
     {
         public static int ProdQty { get; set; } = 5;
         public int PageNum { get; set; }
@@ -14,15 +15,15 @@ namespace Eshop.Menu
 
         public SaleItem[] SaleItems = [];
 
-        public CatalogPage(MenuPage? previosPage, Dictionary<int, IMenuCommand> commands, Type saleItemType, int pageNum = 1) : base(previosPage, commands)
+        public CatalogPage(Dictionary<int, IMenuCommand> commands, Type saleItemType, int pageNum = 1) : base(commands)
         {
             commands.Clear();
-            commands.Add(1, new PreviosProductsCommand());
-            commands.Add(2, new NextProductsCommand());
-            commands.Add(3, new AddToCartCommand());
-            commands.Add(4, new ShowCartCommand());
-            commands.Add(9, new SetQtyDisplayedCommand());
-            commands.Add(0, new BackCommand());
+            commands.Add(1, ServiceProvider.GetRequiredService<PreviosProductsCommand>());
+            commands.Add(2, ServiceProvider.GetRequiredService<NextProductsCommand>());
+            commands.Add(3, ServiceProvider.GetRequiredService<AddToCartCommand>());
+            commands.Add(4, ServiceProvider.GetRequiredService<ShowCartCommand>());
+            commands.Add(9, ServiceProvider.GetRequiredService<SetQtyDisplayedCommand>());
+            commands.Add(0, ServiceProvider.GetRequiredService<BackCommand>());
 
             PageNum = pageNum;
             SaleItemType = saleItemType;
@@ -52,8 +53,8 @@ namespace Eshop.Menu
                     PageNum--;
                     Show();
                 }
-                else
-                    PreviosPage?.Show();
+                //else
+                    //PreviosPage?.Show();
 
                 return;
             }

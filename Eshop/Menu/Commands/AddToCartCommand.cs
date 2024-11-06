@@ -2,38 +2,31 @@
 
 namespace Eshop.Menu.Commands
 {
-    internal class AddToCartCommand : IMenuCommand
+    internal class AddToCartCommand(
+        ApplicationContext context,
+        IRepository<Product> productRepository,
+        IRepository<Service> serviceRepository,
+        Cart cart) : IMenuCommand
     {
         public string Description { get; } = "Add product to cart";
 
-        public void Execute(ApplicationContext app)
+        public void Execute() => ExecuteAsync().Wait();
+        
+        public async Task ExecuteAsync() 
         {
-            Product? product = null;
-            Service? service = null;
+            string? infoMessage = null;
 
-            var currentPage = app.CurrentPage;
+            var currentPage = context.CurrentPage;
+            currentPage.GetUserInput("Input product ID", out int saleItemId);
 
-            currentPage.GetUserInput("Input product ID", out int prodId);
-
-            if (currentPage is CatalogPage catPage)
-            {
-                if (catPage.SaleItemType == typeof(Product))
-                {
-                    product = app.GetProductByID(prodId);
-                    if (product is not null)
-                        app.Cart.Add(product, 1);
-                }
-                else if (catPage.SaleItemType == typeof(Service))
-                {
-                    service = app.GetServiceByID(prodId);
-                    if (service is not null)
-                        app.Cart.Add(service);
-                }
-            }
-            if (product is null && service is null)
-                currentPage.InfoMessage = $"Id {prodId} not found!";
+            if (await productRepository.GetByIdAsync(saleItemId) is Product product)
+                cart.Add(product, 1);
+            else if (await serviceRepository.GetByIdAsync(saleItemId) is Service service)
+                cart.Add(service);
             else
-                currentPage.InfoMessage = "Successfully added!";
+                infoMessage = $"Id {saleItemId} not found!";
+
+            currentPage.InfoMessage = infoMessage ?? "Successfully added!";
         }
     }
 }

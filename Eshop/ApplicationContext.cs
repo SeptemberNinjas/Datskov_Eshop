@@ -1,42 +1,72 @@
-﻿using Eshop.Menu;
-using Eshop.Core;
+﻿using Eshop.Core;
+using Eshop.DataAccess;
+using Eshop.DataAccess.PGDataStorage;
+using Eshop.Menu;
+using Eshop.Menu.Commands;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Eshop
 {
-    internal class ApplicationContext()
+    internal class ApplicationContext
     {
-        internal MenuPage CurrentPage { get; set; } = new(null, []);
-        
-        private readonly Product[] _products = [
-                    new (1, "IPhone 16 Pro ultimate HD quadro maximum", 155499, 10, "the best of the best of the best"),
-                    new (2, "Xiaomi iphone killer [assasinnator] 512mp", 70999, 200),
-                    new (3, "Dexp phone GG340", 1699, 20000, "1mb/512kb 3\", 0,3mp"),
-                    new (4, "Samsung Galaxy Universe MilkyWay Dominator Keller Terron", 124599, 100),
-                    new (5, "End of Ideas product1", 599, 10 ,"some product"),
-                    new (6, "End of Ideas product2", 699, 10, "some product"),
-                    new (7, "End of Ideas product3", 799, 10, "some product")];
-        public Product[] Products { get { return _products; } }
+        private readonly IServiceProvider ServiceProvider;
 
-        private readonly static Service[] _services = [
-                    new (1, "Update Android to version 1.2.1.45.85.1.9.7.33", 1000),
-                    new (2, "Extra warranty 120 years", 3000),
-                    new (3, "Watch in your eyes", 100),
-                    new (4, "Some service1", 200)];
-
-        public Service[] Services { get { return _services; } }
-
-        private static int _lastOrderNum = 0;
-        public Cart Cart { get; } = new();
-        public List<Order> Orders { get; } = [];
-
-        public Product? GetProductByID(int Id)
+        internal ApplicationContext(IConfiguration appconfig)
         {
-            return _products.FirstOrDefault(x => x.Id == Id);
+            var services = new ServiceCollection()
+                .AddSingleton<RepositoryFactory>(x => new PGDataStorageFactory(appconfig["dbConnectionString"] ?? ""))
+                .AddScoped<IRepository<Product>>(x => x.GetRequiredService<RepositoryFactory>().ProductManager())
+                .AddScoped<IRepository<Service>>(x => x.GetRequiredService<RepositoryFactory>().ServiceManager())
+                .AddScoped<IRepository<Order>>(x => x.GetRequiredService<RepositoryFactory>().OrderManager())
+                .AddScoped<IRepository<Cart>>(x => x.GetRequiredService<RepositoryFactory>().CartManager())
+                .AddScoped<Cart>(x => x.GetRequiredService<RepositoryFactory>().CartManager().GetAllAsync().Result.FirstOrDefault() ?? new Cart())
+                .AddScoped<ApplicationContext>(x => this)
+                .AddScoped<AddToCartCommand>()
+                .AddScoped<BackCommand>()
+                .AddScoped<ClearCartCommand>()
+                .AddScoped<CreateOrderCommand>()
+                .AddScoped<PreviosProductsCommand>()
+                .AddScoped<NextProductsCommand>()
+                .AddScoped<SetQtyDisplayedCommand>()
+                .AddScoped<ShowCartCommand>()
+                .AddScoped<ShowCatalogChoiceCommand>()
+                .AddScoped<ShowCatalogCommand<Product>>()
+                .AddScoped<ShowCatalogCommand<Service>>()
+                .AddScoped<ShowOrdersCommand>()
+                .AddScoped<OrderPayCommand>()
+                ;
+
+            ServiceProvider = services.BuildServiceProvider().CreateScope().ServiceProvider;
+            MenuPage.ServiceProvider = ServiceProvider;
+
+            var cart = ServiceProvider.GetRequiredService<Cart>();
+            cart.CartChangeNotyfy += UpdateCartCache;
+
+            var mainMenuCommands = new Dictionary<int, IMenuCommand>()
+            {
+                { 1, ServiceProvider.GetRequiredService<ShowCatalogChoiceCommand>() },
+                { 4, ServiceProvider.GetRequiredService<ShowCartCommand>() },
+                { 5, ServiceProvider.GetRequiredService<ShowOrdersCommand>() },
+                { 0, new ExitCommand() }
+            };
+            CurrentPage = new(mainMenuCommands);
         }
-        public Service? GetServiceByID(int Id)
+        internal Stack<MenuPage> OpenPages = new();
+
+        internal MenuPage CurrentPage { get => OpenPages.Peek(); set => OpenPages.Push(value); }
+
+        public int GetNewOrderNumber()
         {
-            return _services.FirstOrDefault(x => x.Id == Id);
+            var lastId = ServiceProvider.GetRequiredService<IRepository<Order>>().GetAllAsync().Result.MaxBy(x => x.Id)?.Id ?? 0;
+            return ++lastId;
         }
-        public int GetNewOrderNumber() => ++_lastOrderNum;
+
+        internal async void UpdateCartCache()
+        {
+            var cart = ServiceProvider.GetRequiredService<Cart>();
+            if (cart != null)
+                await ServiceProvider.GetRequiredService<IRepository<Cart>>().SaveAsync(cart);
+        }
     }
 }

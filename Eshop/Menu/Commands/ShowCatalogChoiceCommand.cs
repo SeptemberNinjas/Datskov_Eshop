@@ -2,21 +2,24 @@
 
 namespace Eshop.Menu.Commands
 {
-    internal class ShowCatalogChoiceCommand : IMenuCommand
+    internal class ShowCatalogChoiceCommand(
+        ApplicationContext context,
+        ShowCatalogCommand<Product> showProductCommand,
+        ShowCatalogCommand<Service> showServiceCommand,
+        BackCommand backCommand) : IMenuCommand
     {
         public string Description { get; } = "Show catalog";
-        private readonly Dictionary<int, IMenuCommand> _catCommands = new()
+
+        public void Execute()
+        {
+            Dictionary<int, IMenuCommand> catCommands = new()
             {
-                { 1, new ShowCatalogCommand(typeof(Product)) },
-                { 2, new ShowCatalogCommand(typeof(Service)) },
-                { 0, new BackCommand() }
+                { 1, showProductCommand },
+                { 2, showServiceCommand },
+                { 0, backCommand }
             };
 
-        public void Execute(ApplicationContext app)
-        {
-            var previosPage = app.CurrentPage;
-
-            app.CurrentPage = new(previosPage, _catCommands);
+            context.CurrentPage = new(catCommands);
         }
     }
 }

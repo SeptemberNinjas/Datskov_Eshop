@@ -4,6 +4,12 @@
     {
         public string Description { get; }
 
-        public void Execute(ApplicationContext app);
+        public void Execute();
+
+        public Task ExecuteAsync(CancellationToken ct = default)
+        {
+            Execute();
+            return Task.CompletedTask;
+        } 
     }
 }

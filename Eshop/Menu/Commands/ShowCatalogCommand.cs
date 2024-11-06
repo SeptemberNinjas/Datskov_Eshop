@@ -2,16 +2,18 @@
 
 namespace Eshop.Menu.Commands
 {
-    internal class ShowCatalogCommand(Type productType) : IMenuCommand
+    internal class ShowCatalogCommand<T>(ApplicationContext context, IRepository<T> saleItemRepository) : IMenuCommand where T : SaleItem
     {
-        public string Description { get; } = productType == typeof(Product) ? "Products" : "Services";
+        public string Description { get; } = typeof(T) == typeof(Product) ? "Products" : "Services";
 
-        public void Execute(ApplicationContext app)
+        public void Execute() => ExecuteAsync().Wait();
+        
+        public async Task ExecuteAsync(CancellationToken ct = default)
         {
-            var previosPage = app.CurrentPage;
-            CatalogPage catalogPage = new(previosPage, [], productType) { SaleItems = productType == typeof(Service) ? app.Services : app.Products };
-
-            app.CurrentPage = catalogPage;
+            context.CurrentPage = new CatalogPage([], typeof(T))
+            {
+                SaleItems = [.. await saleItemRepository.GetAllAsync(ct)]
+            };
         }
     }
 }

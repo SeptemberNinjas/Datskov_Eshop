@@ -1,10 +1,10 @@
 ﻿namespace Eshop.Core
 {
-    public class OrderItem(CartItem<SaleItem> cartItem)
+    public class OrderItem
     {
-        public SaleItem SaleItem { get; } = cartItem.SaleItem;
-        public decimal Price { get; } = cartItem.Price;
-        public uint Count { get; } = cartItem.Count;
-        public decimal Amount { get ; } = cartItem.Amount;
+        public int SaleItemId { get; set; }
+        public decimal Price { get; set; }
+        public uint Count { get; set; }
+        public decimal Amount { get => Price * (decimal)Count; }
     }
 }
