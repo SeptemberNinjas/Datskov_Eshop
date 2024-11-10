@@ -8,12 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Core\Eshop.Core.csproj" />
-    <ProjectReference Include="..\Eshop.DataAccess\Eshop.DataAccess.csproj" />
+    <Compile Remove="CacheData\**" />
+    <EmbeddedResource Remove="CacheData\**" />
+    <None Remove="CacheData\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="CacheData\" />
+    <ProjectReference Include="..\Core\Eshop.Core.csproj" />
+    <ProjectReference Include="..\Eshop.DataAccess\Eshop.DataAccess.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -5,11 +5,11 @@ using System.Globalization;
 using System.Text;
 using System.Text.Json;
 
-namespace Eshop.DataAccess.PGDataStorage
+namespace Eshop.DataAccess.DatabaseStorage
 {
-    class OrderPGDataStorage : DBContext, IRepository<Order>
+    class OrderDatabaseStorage : DBContext, IRepository<Order>
     {
-        public OrderPGDataStorage(string connectionString) : base(connectionString) { }
+        public OrderDatabaseStorage(string connectionString) : base(connectionString) { }
 
         public IReadOnlyCollection<Order> GetAll() => GetAllAsync().Result;
 

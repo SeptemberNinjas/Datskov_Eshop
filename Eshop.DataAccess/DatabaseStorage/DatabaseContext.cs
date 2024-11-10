@@ -2,7 +2,7 @@
 using System.Data;
 using System.Data.Common;
 
-namespace Eshop.DataAccess.PGDataStorage
+namespace Eshop.DataAccess.DatabaseStorage
 {
     public class DBContext : IDisposable
     {

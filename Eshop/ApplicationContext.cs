@@ -1,6 +1,6 @@
 ﻿using Eshop.Core;
 using Eshop.DataAccess;
-using Eshop.DataAccess.PGDataStorage;
+using Eshop.DataAccess.DatabaseStorage;
 using Eshop.Menu;
 using Eshop.Menu.Commands;
 using Microsoft.Extensions.Configuration;
@@ -15,12 +15,12 @@ namespace Eshop
         internal ApplicationContext(IConfiguration appconfig)
         {
             var services = new ServiceCollection()
-                .AddSingleton<RepositoryFactory>(x => new PGDataStorageFactory(appconfig["dbConnectionString"] ?? ""))
-                .AddScoped<IRepository<Product>>(x => x.GetRequiredService<RepositoryFactory>().ProductManager())
-                .AddScoped<IRepository<Service>>(x => x.GetRequiredService<RepositoryFactory>().ServiceManager())
-                .AddScoped<IRepository<Order>>(x => x.GetRequiredService<RepositoryFactory>().OrderManager())
-                .AddScoped<IRepository<Cart>>(x => x.GetRequiredService<RepositoryFactory>().CartManager())
-                .AddScoped<Cart>(x => x.GetRequiredService<RepositoryFactory>().CartManager().GetAllAsync().Result.FirstOrDefault() ?? new Cart())
+                .AddSingleton<RepositoryFactory>(x => new DatabaseStorageFactory(appconfig["dbConnectionString"] ?? ""))
+                .AddScoped<IRepository<Product>>(x => x.GetRequiredService<RepositoryFactory>().ProductRepository())
+                .AddScoped<IRepository<Service>>(x => x.GetRequiredService<RepositoryFactory>().ServiceRepository())
+                .AddScoped<IRepository<Order>>(x => x.GetRequiredService<RepositoryFactory>().OrderRepository())
+                .AddScoped<IRepository<Cart>>(x => x.GetRequiredService<RepositoryFactory>().CartRepository())
+                .AddScoped<Cart>(x => x.GetRequiredService<RepositoryFactory>().CartRepository().GetAllAsync().Result.FirstOrDefault() ?? new Cart())
                 .AddScoped<ApplicationContext>(x => this)
                 .AddScoped<AddToCartCommand>()
                 .AddScoped<BackCommand>()
