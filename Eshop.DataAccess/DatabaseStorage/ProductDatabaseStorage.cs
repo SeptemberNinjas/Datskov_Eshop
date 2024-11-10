@@ -2,11 +2,11 @@
 using System.Data;
 using System.Data.Common;
 
-namespace Eshop.DataAccess.PGDataStorage
+namespace Eshop.DataAccess.DatabaseStorage
 {
-    internal class ProductPGDataStorage : DBContext, IRepository<Product>
+    internal class ProductDatabaseStorage : DBContext, IRepository<Product>
     {
-        public ProductPGDataStorage(string connectionString) : base(connectionString) { }
+        public ProductDatabaseStorage(string connectionString) : base(connectionString) { }
 
         public IReadOnlyCollection<Product> GetAll()
         {

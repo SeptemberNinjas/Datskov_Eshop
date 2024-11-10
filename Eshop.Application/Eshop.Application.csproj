@@ -7,11 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Core\Eshop.Core.csproj" />
+    <PackageReference Include="FluentResults" Version="3.16.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Npgsql" Version="8.0.5" />
+    <ProjectReference Include="..\Core\Eshop.Core.csproj" />
+    <ProjectReference Include="..\Eshop.DataAccess\Eshop.DataAccess.csproj" />
   </ItemGroup>
 
 </Project>
