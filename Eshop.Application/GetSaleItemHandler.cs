@@ -13,29 +13,29 @@ namespace Eshop.Application
             _repositoryFactory = repositoryFactory;
         }
 
-        //public async Task<Result<IEnumerable<SaleItemDto>>> GetItemsAsync(SaleItemType itemType, int? count)
+        //public async Task<Result<IEnumerable<SaleItemDto>>> GetItemsAsync(SaleItemType itemType)
         //{
-        //    //var repository = _repositoryFactory.CreateSaleItemRepository();
+        //    var repository = _repositoryFactory.SaleItemRepository();
 
-        //    //try
-        //    //{
-        //    //    var items = (await repository
-        //    //        .GetAllAsync())
-        //    //        .Where(i => i.ItemType == itemType);
+        //    try
+        //    {
+        //        var items = (await repository
+        //            .GetAllAsync())
+        //            .Where(i => i.Type == itemType);
 
-        //    //    var requestedItems = count is null or <= 0
-        //    //        ? items
-        //    //        : items.Take(count.Value);
+        //        var requestedItems = count is null or <= 0
+        //            ? items
+        //            : items.Take(count.Value);
 
-        //    //    return Result.Ok(requestedItems
-        //    //        .Select(i => new SaleItemDto(i.ItemType, i.Id, i.Name, i.Price, (i as Product)?.Stock)));
-        //    //}
-        //    //catch (Exception ex)
-        //    //{
-        //    //    return Result.Fail("Не удалось получить коллекцию торговых единиц")
-        //    //        .WithError(ex.Message)
-        //    //        .WithError(ex.StackTrace);
-        //    //}
+        //        return Result.Ok(requestedItems
+        //            .Select(i => new SaleItemDto(i.Type, i.Id, i.Name, i.Price, (i as Product)?.Stock)));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Result.Fail("Не удалось получить коллекцию торговых единиц")
+        //            .WithError(ex.Message)
+        //            .WithError(ex.StackTrace);
+        //    }
         //}
     }
 }

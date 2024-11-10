@@ -63,14 +63,12 @@ namespace Eshop.DataAccess.DatabaseStorage
             };
         }
 
-        public SaleItem? GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
+        public SaleItem? GetById(int id) => GetByIdAsync(id).Result;
 
-        public Task<SaleItem?> GetByIdAsync(int id, CancellationToken ct = default)
+        public async Task<SaleItem?> GetByIdAsync(int id, CancellationToken ct = default)
         {
-            throw new NotImplementedException();
+            var saleItems = await GetAllAsync(ct);
+            return saleItems.FirstOrDefault(x => x.Id == id);
         }
 
         public Task<int> GetCountAsync(CancellationToken ct = default)

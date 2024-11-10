@@ -8,12 +8,14 @@ namespace Eshop.DataAccess.DatabaseStorage
         
         public DatabaseStorageFactory(string connectionString) => _connectionString = connectionString;
 
-        public override IRepository<Order> OrderManager() => new OrderDatabaseStorage(_connectionString);
+        public override IRepository<Order> OrderRepository() => new OrderDatabaseStorage(_connectionString);
 
-        public override IRepository<Product> ProductManager() => new ProductDatabaseStorage(_connectionString);
+        public override IRepository<Product> ProductRepository() => new ProductDatabaseStorage(_connectionString);
 
-        public override IRepository<Service> ServiceManager() => new ServiceDatabaseStorage(_connectionString);
+        public override IRepository<Service> ServiceRepository() => new ServiceDatabaseStorage(_connectionString);
 
-        public override IRepository<Cart> CartManager() => new CartDatebaseStorage(_connectionString, ProductManager(), ServiceManager());
+        public override IRepository<Cart> CartRepository() => new CartDatebaseStorage(_connectionString, ProductRepository(), ServiceRepository());
+
+        public override IRepository<SaleItem> SaleItemRepository() => new SaleItemDatabaseStorage(_connectionString);
     }
 }
