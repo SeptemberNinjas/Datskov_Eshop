@@ -18,14 +18,5 @@
         {
             Description = description;
         }
-
-        public void Representation(out Dictionary<string, string> representationData)
-        {
-            representationData = [];
-            representationData.Add("Id", Id.ToString());
-            representationData.Add("Name", Name);
-            representationData.Add("Price", Price.ToString());
-            representationData.Add("Description", Description);
-        }
     }
 }

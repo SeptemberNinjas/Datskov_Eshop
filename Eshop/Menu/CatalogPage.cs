@@ -1,4 +1,5 @@
-﻿using Eshop.Core;
+﻿using Eshop.Application.SaleItemHandlers;
+using Eshop.Core;
 using Eshop.Menu.Commands;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text;
@@ -13,7 +14,7 @@ namespace Eshop.Menu
 
         private readonly string _title = string.Empty;
 
-        public SaleItem[] SaleItems = [];
+        public SaleItemDto[] SaleItems = [];
 
         public CatalogPage(Dictionary<int, IMenuCommand> commands, Type saleItemType, int pageNum = 1) : base(commands)
         {
@@ -115,6 +116,15 @@ namespace Eshop.Menu
                 sb.Append(Char);
 
             return sb.ToString();
+        }
+
+        public void Representation(SaleItemDto saleItem, out Dictionary<string, string> representationData)
+        {
+            representationData = [];
+            representationData.Add("Id", saleItem.Id.ToString());
+            representationData.Add("Name", saleItem.Name);
+            representationData.Add("Price", saleItem.Price.ToString());
+            representationData.Add("Description", saleItem.Description);
         }
     }
 }

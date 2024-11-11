@@ -1,38 +1,47 @@
-﻿using Eshop.Core;
+﻿using Eshop.Application.CartHandlers;
+using Eshop.Application.OrderHandlers;
 
 namespace Eshop.Menu.Commands
 {
-    internal class CreateOrderCommand(
-        ApplicationContext context,
-        IRepository<Order> orderRepository,
-        ShowOrdersCommand showOrdersCommand,
-        Cart cart) : IMenuCommand
+    internal class CreateOrderCommand : IMenuCommand
     {
+        private readonly ApplicationContext _context;
+        private readonly CreateOrderFromCartHandler _createOrderFromCartHandler;
+        private readonly ClearCartHandler _clearCartHandler;
+        private readonly ShowOrdersCommand _showOrdersCommand;
+
         public string Description { get; } = "Create order";
 
+        public CreateOrderCommand(ApplicationContext context, 
+            CreateOrderFromCartHandler createOrderFromCartHandler,
+            ClearCartHandler clearCartHandler,
+            ShowOrdersCommand showOrdersCommand)
+        {
+            _context = context;
+            _createOrderFromCartHandler = createOrderFromCartHandler;
+            _clearCartHandler = clearCartHandler;
+            _showOrdersCommand = showOrdersCommand;
+        }
+        
         public void Execute() => ExecuteAsync().Wait();
 
         public async Task ExecuteAsync()
         {
-            if (cart.Count == 0)
+            var result = await _createOrderFromCartHandler.CreateOrderAsync();
+            if (result.IsFailed) 
             {
-                context.CurrentPage.InfoMessage = "Cart is empty!";
+                _context.CurrentPage.InfoMessage = result.Errors[0].Message;
                 return;
             }
 
-            var order = new Order(context.GetNewOrderNumber());
-            foreach (var cartItem in cart.Items)
+            result = await _clearCartHandler.ClearCartAsync();
+            if (result.IsFailed)
             {
-                var orderLine = order.Add();
-                orderLine.SaleItemId = cartItem.Product?.Id ?? cartItem.Service?.Id ?? 0;
-                orderLine.Price = cartItem.Price;
-                orderLine.Count = cartItem.Count;
+                _context.CurrentPage.InfoMessage = result.Errors[0].Message;
+                return;
             }
 
-            await orderRepository.SaveAsync(order);
-            cart.Clear();
-
-            await showOrdersCommand.ExecuteAsync();
+            await _showOrdersCommand.ExecuteAsync();
         }
     }
 }

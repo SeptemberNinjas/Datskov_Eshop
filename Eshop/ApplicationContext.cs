@@ -1,4 +1,7 @@
-﻿using Eshop.Core;
+﻿using Eshop.Application.CartHandlers;
+using Eshop.Application.OrderHandlers;
+using Eshop.Application.SaleItemHandlers;
+using Eshop.Core;
 using Eshop.DataAccess;
 using Eshop.DataAccess.DatabaseStorage;
 using Eshop.Menu;
@@ -20,7 +23,6 @@ namespace Eshop
                 .AddScoped<IRepository<Service>>(x => x.GetRequiredService<RepositoryFactory>().ServiceRepository())
                 .AddScoped<IRepository<Order>>(x => x.GetRequiredService<RepositoryFactory>().OrderRepository())
                 .AddScoped<IRepository<Cart>>(x => x.GetRequiredService<RepositoryFactory>().CartRepository())
-                .AddScoped<Cart>(x => x.GetRequiredService<RepositoryFactory>().CartRepository().GetAllAsync().Result.FirstOrDefault() ?? new Cart())
                 .AddScoped<ApplicationContext>(x => this)
                 .AddScoped<AddToCartCommand>()
                 .AddScoped<BackCommand>()
@@ -35,13 +37,15 @@ namespace Eshop
                 .AddScoped<ShowCatalogCommand<Service>>()
                 .AddScoped<ShowOrdersCommand>()
                 .AddScoped<OrderPayCommand>()
+                .AddScoped<GetSaleItemHandler>()
+                .AddScoped<AddItemToCartHandler>()
+                .AddScoped<GetCartHandler>()
+                .AddScoped<ClearCartHandler>()
+                .AddScoped<CreateOrderFromCartHandler>()
                 ;
 
             ServiceProvider = services.BuildServiceProvider().CreateScope().ServiceProvider;
             MenuPage.ServiceProvider = ServiceProvider;
-
-            var cart = ServiceProvider.GetRequiredService<Cart>();
-            cart.CartChangeNotyfy += UpdateCartCache;
 
             var mainMenuCommands = new Dictionary<int, IMenuCommand>()
             {
@@ -55,18 +59,5 @@ namespace Eshop
         internal Stack<MenuPage> OpenPages = new();
 
         internal MenuPage CurrentPage { get => OpenPages.Peek(); set => OpenPages.Push(value); }
-
-        public int GetNewOrderNumber()
-        {
-            var lastId = ServiceProvider.GetRequiredService<IRepository<Order>>().GetAllAsync().Result.MaxBy(x => x.Id)?.Id ?? 0;
-            return ++lastId;
-        }
-
-        internal async void UpdateCartCache()
-        {
-            var cart = ServiceProvider.GetRequiredService<Cart>();
-            if (cart != null)
-                await ServiceProvider.GetRequiredService<IRepository<Cart>>().SaveAsync(cart);
-        }
     }
 }
