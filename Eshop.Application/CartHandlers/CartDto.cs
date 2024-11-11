@@ -1,6 +1,6 @@
 ﻿namespace Eshop.Application.CartHandlers
 {
-    public class CartDto
+    public record CartDto
     {
         public List<CartItemDto> Items { get; init; }
         public uint Count { get => (uint)Items.Sum(item => item.Count); }

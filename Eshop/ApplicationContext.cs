@@ -19,10 +19,7 @@ namespace Eshop
         {
             var services = new ServiceCollection()
                 .AddSingleton<RepositoryFactory>(x => new DatabaseStorageFactory(appconfig["dbConnectionString"] ?? ""))
-                .AddScoped<IRepository<Product>>(x => x.GetRequiredService<RepositoryFactory>().ProductRepository())
-                .AddScoped<IRepository<Service>>(x => x.GetRequiredService<RepositoryFactory>().ServiceRepository())
                 .AddScoped<IRepository<Order>>(x => x.GetRequiredService<RepositoryFactory>().OrderRepository())
-                .AddScoped<IRepository<Cart>>(x => x.GetRequiredService<RepositoryFactory>().CartRepository())
                 .AddScoped<ApplicationContext>(x => this)
                 .AddScoped<AddToCartCommand>()
                 .AddScoped<BackCommand>()
@@ -42,6 +39,7 @@ namespace Eshop
                 .AddScoped<GetCartHandler>()
                 .AddScoped<ClearCartHandler>()
                 .AddScoped<CreateOrderFromCartHandler>()
+                .AddScoped<GetOrderHandler>()
                 ;
 
             ServiceProvider = services.BuildServiceProvider().CreateScope().ServiceProvider;

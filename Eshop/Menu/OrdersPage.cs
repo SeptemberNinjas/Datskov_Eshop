@@ -1,4 +1,4 @@
-﻿using Eshop.Core;
+﻿using Eshop.Application.OrderHandlers;
 using Eshop.Menu.Commands;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -6,10 +6,10 @@ namespace Eshop.Menu
 {
     internal class OrdersPage : MenuPage
     {
-        public Order[] Orders { get; set; } = [];
+        public OrderDto[] Orders { get; set; } = [];
         public OrdersPage(Dictionary<int, IMenuCommand> commands) : base(commands)
         {
-            commands.Add(1, ServiceProvider.GetRequiredService<OrderPayCommand>());
+            //commands.Add(1, ServiceProvider.GetRequiredService<OrderPayCommand>());
             commands.Add(0, ServiceProvider.GetRequiredService<BackCommand>());
         }
         public override void DrawPage()
@@ -17,7 +17,7 @@ namespace Eshop.Menu
             Console.WriteLine("--// My orders // --");
             Console.WriteLine("----------------------------------------------------------");
 
-            foreach (Order order in Orders)
+            foreach (var order in Orders)
             {
                 Console.WriteLine("Number: " + order.Number);
                 Console.WriteLine("Status: " + order.Status);

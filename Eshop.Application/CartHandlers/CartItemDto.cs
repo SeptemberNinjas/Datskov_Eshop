@@ -2,7 +2,7 @@
 
 namespace Eshop.Application.CartHandlers
 {
-    public class CartItemDto
+    public record CartItemDto
     {
         public SaleItem SaleItem { get; init; }
 
