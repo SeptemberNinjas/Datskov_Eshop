@@ -1,5 +1,4 @@
-﻿using Eshop.Core;
-using Eshop.DataAccess;
+﻿using Eshop.DataAccess;
 using FluentResults;
 
 namespace Eshop.Application.OrderHandlers
@@ -13,7 +12,7 @@ namespace Eshop.Application.OrderHandlers
             _repositoryFactory = repositoryFactory;
         }
 
-        public async Task<Result<List<OrderDto>>> GetAllAsync(CancellationToken ct = default)
+        public async Task<Result<IReadOnlyCollection<OrderDto>>> GetAllAsync(CancellationToken ct = default)
         {
             try
             {
@@ -28,8 +27,7 @@ namespace Eshop.Application.OrderHandlers
                     }
                     orderDtos.Add(new(order.Id, order.Status, orderItemDtos));
                 }
-
-                return Result.Ok(orderDtos);
+                return Result.Ok((IReadOnlyCollection<OrderDto>)ordersDto);
             }
             catch (Exception ex)
             {
@@ -38,6 +36,7 @@ namespace Eshop.Application.OrderHandlers
                     .WithError(ex.StackTrace);
             }
         }
+
         public async Task<Result<OrderDto?>> GetByIdAsync(int id, CancellationToken ct = default)
         {
             var result = await GetAllAsync(ct);

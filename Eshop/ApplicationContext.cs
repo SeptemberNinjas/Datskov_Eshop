@@ -22,6 +22,7 @@ namespace Eshop
                 .AddScoped<IRepository<Service>>(x => x.GetRequiredService<RepositoryFactory>().ServiceRepository())
                 .AddScoped<IRepository<Order>>(x => x.GetRequiredService<RepositoryFactory>().OrderRepository())
                 .AddScoped<IRepository<Cart>>(x => x.GetRequiredService<RepositoryFactory>().CartRepository())
+                .AddScoped<ApplicationContext>(x => this)
                 .AddScoped<AddToCartCommand>()
                 .AddScoped<BackCommand>()
                 .AddScoped<ClearCartCommand>()
@@ -34,7 +35,7 @@ namespace Eshop
                 .AddScoped<ShowCatalogCommand<Product>>()
                 .AddScoped<ShowCatalogCommand<Service>>()
                 .AddScoped<ShowOrdersCommand>()
-                .AddScoped<OrderPayCommand>()
+                .AddScoped<CreateOrderFromCartHandler>()
                 ;
             
 

@@ -16,7 +16,6 @@ namespace Eshop.Application.OrderHandlers
             Id = id;
             Status = status;
             Items = items;
-
         }
     }
 }

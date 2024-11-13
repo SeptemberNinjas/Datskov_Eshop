@@ -6,7 +6,7 @@
         public decimal Price { get; init; }
         public uint Count { get; init; }
         public decimal Amount { get => (decimal)Count * Price; }
-
+    
         public OrderItemDto(int saleItemId, uint count, decimal price)
         {
             SaleItemId = saleItemId;
