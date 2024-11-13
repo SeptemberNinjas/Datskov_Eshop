@@ -1,9 +1,6 @@
-﻿using Eshop.Application.CartHandlers;
-using Eshop.Application.OrderHandlers;
-using Eshop.Application.SaleItemHandlers;
+﻿using Eshop.Application;
 using Eshop.Core;
 using Eshop.DataAccess;
-using Eshop.DataAccess.DatabaseStorage;
 using Eshop.Menu;
 using Eshop.Menu.Commands;
 using Microsoft.Extensions.Configuration;
@@ -17,13 +14,14 @@ namespace Eshop
 
         internal ApplicationContext(IConfiguration appconfig)
         {
-            var services = new ServiceCollection()
-                .AddSingleton<RepositoryFactory>(x => new DatabaseStorageFactory(appconfig["dbConnectionString"] ?? ""))
+            var services = new ServiceCollection();
+            services.RegisterApplicationDependencies(appconfig);
+            // регистрация зависимостей консольного пиложения
+            services.AddScoped<ApplicationContext>(x => this)
                 .AddScoped<IRepository<Product>>(x => x.GetRequiredService<RepositoryFactory>().ProductRepository())
                 .AddScoped<IRepository<Service>>(x => x.GetRequiredService<RepositoryFactory>().ServiceRepository())
                 .AddScoped<IRepository<Order>>(x => x.GetRequiredService<RepositoryFactory>().OrderRepository())
                 .AddScoped<IRepository<Cart>>(x => x.GetRequiredService<RepositoryFactory>().CartRepository())
-                .AddScoped<ApplicationContext>(x => this)
                 .AddScoped<AddToCartCommand>()
                 .AddScoped<BackCommand>()
                 .AddScoped<ClearCartCommand>()
@@ -37,12 +35,8 @@ namespace Eshop
                 .AddScoped<ShowCatalogCommand<Service>>()
                 .AddScoped<ShowOrdersCommand>()
                 .AddScoped<OrderPayCommand>()
-                .AddScoped<GetSaleItemHandler>()
-                .AddScoped<AddItemToCartHandler>()
-                .AddScoped<GetCartHandler>()
-                .AddScoped<ClearCartHandler>()
-                .AddScoped<CreateOrderFromCartHandler>()
                 ;
+            
 
             ServiceProvider = services.BuildServiceProvider().CreateScope().ServiceProvider;
             MenuPage.ServiceProvider = ServiceProvider;

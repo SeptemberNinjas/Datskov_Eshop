@@ -42,7 +42,9 @@ namespace Eshop.DataAccess.DatabaseStorage
                 from 
                     catalog c
                         left join stock s 
-                        on c.Id = s.Id";
+                        on c.Id = s.Id
+                order by 
+                    id";
 
             return await ExecuteReaderListAsync<SaleItem>(query, ct, GetSaleItem);
         }

@@ -15,12 +15,15 @@ namespace Eshop.Application.OrderHandlers
             _getCartHandler = getCartHandler;
         }
 
-        public async Task<Result> CreateOrderAsync(CancellationToken ct = default)
+        public async Task<Result<Order>> CreateOrderAsync(CancellationToken ct = default)
         {
             var cartGetResult = await _getCartHandler.GetAsync(ct);
             if (cartGetResult.IsFailed)
                 return cartGetResult.ToResult();
 
+            if(cartGetResult.Value.Items.Count == 0)
+                return Result.Fail("Корзина пуста");
+                
             var cart = cartGetResult.Value;
 
             var newOrderNo = await GetNewOrderNumberAsync(ct);
@@ -39,7 +42,7 @@ namespace Eshop.Application.OrderHandlers
             try
             {
                 await _repositoryFactory.OrderRepository().SaveAsync(order, ct);
-                return Result.Ok();
+                return Result.Ok(order);
             }
             catch (Exception ex)
             {
@@ -58,7 +61,8 @@ namespace Eshop.Application.OrderHandlers
             }
             catch (Exception ex)
             {
-                return Result.Fail("Не удалось получить номер нового заказа");
+                return Result.Fail("Не удалось получить номер нового заказа")
+                    .WithError(ex.Message);
             }
         }
     }
