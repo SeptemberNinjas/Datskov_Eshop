@@ -8,30 +8,7 @@ namespace Eshop.DataAccess.DatabaseStorage
     {
         public SaleItemDatabaseStorage(string connectionString) : base(connectionString) { }
 
-        public IReadOnlyCollection<SaleItem> GetAll()
-        {
-            using var command = GetCommand(
-                @"select 
-                    c.*, 
-                    COALESCE(s.amount, 0) as amount
-                from 
-                    catalog c
-                        left join stock s 
-                        on c.id = s.id
-                order by 
-                    id");
-
-            using var reader = command.ExecuteReader();
-
-            var result = new List<SaleItem>();
-
-            while (reader.Read())
-            {
-                result.Add(GetSaleItem(reader));
-            }
-
-            return result;
-        }
+        public IReadOnlyCollection<SaleItem> GetAll() => GetAllAsync().Result;
 
         public async Task<IReadOnlyCollection<SaleItem>> GetAllAsync(CancellationToken ct = default)
         {

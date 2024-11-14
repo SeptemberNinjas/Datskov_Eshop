@@ -4,7 +4,7 @@ namespace Eshop.Application.SaleItemHandlers
 {
     public record SaleItemDto
     {
-        public SaleItemType ItemType { get; init; }
+        public int ItemType { get; init; }
         public int Id { get; init; }
         public string Name { get; init; }
         public string Description { get; init; }
@@ -13,7 +13,7 @@ namespace Eshop.Application.SaleItemHandlers
 
         public SaleItemDto(SaleItemType ItemType, int Id, string Name, string Description, decimal Price, decimal? Stock = null)
         {
-            this.ItemType = ItemType;
+            this.ItemType = (int)ItemType;
             this.Id = Id;
             this.Name = Name;
             this.Description = Description;

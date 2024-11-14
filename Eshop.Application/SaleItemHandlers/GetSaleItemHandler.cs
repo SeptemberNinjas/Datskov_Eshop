@@ -43,7 +43,7 @@ namespace Eshop.Application.SaleItemHandlers
                 if (requestedItem != null)
                     return Result.Ok(new SaleItemDto(requestedItem.Type, requestedItem.Id, requestedItem.Name, requestedItem.Description, requestedItem.Price, (requestedItem as Product)?.Stock));
                 else
-                    throw new Exception();
+                    return Result.Fail("Не удалось получить торговую единицу");
             }
             catch (Exception ex)
             {

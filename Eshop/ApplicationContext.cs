@@ -37,7 +37,7 @@ namespace Eshop
                 .AddScoped<ShowCatalogCommand<Product>>()
                 .AddScoped<ShowCatalogCommand<Service>>()
                 .AddScoped<ShowOrdersCommand>()
-                .AddScoped<CreateOrderFromCartHandler>()
+                .AddScoped<CreateOrderHandler>()
                 ;
             
 

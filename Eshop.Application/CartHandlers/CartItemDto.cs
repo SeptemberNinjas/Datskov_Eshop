@@ -1,10 +1,11 @@
-﻿using Eshop.Core;
+﻿using Eshop.Application.SaleItemHandlers;
+using Eshop.Core;
 
 namespace Eshop.Application.CartHandlers
 {
     public record CartItemDto
     {
-        public SaleItem SaleItem { get; init; }
+        public SaleItemDto SaleItem { get; init; }
 
         public decimal Price { get => SaleItem.Price; }
         public uint Count { get; init; }
@@ -12,7 +13,7 @@ namespace Eshop.Application.CartHandlers
 
         public CartItemDto(SaleItem saleItem, uint count, decimal amount)
         {
-            SaleItem = saleItem;
+            SaleItem = new(saleItem.Type, saleItem.Id, saleItem.Name, saleItem.Description, saleItem.Price, (saleItem as Product)?.Stock);
             Count = count;
             Amount = amount;
         }

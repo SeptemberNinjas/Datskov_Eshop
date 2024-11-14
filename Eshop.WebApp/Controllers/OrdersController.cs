@@ -7,26 +7,24 @@ namespace Eshop.WebApp.Controllers
     [Route("[controller]")]
     public class OrdersController : ControllerBase
     {
-        private readonly CreateOrderFromCartHandler _createOrderFromCartHandler;
+        private readonly CreateOrderHandler _createOrderFromCartHandler;
         private readonly GetOrderHandler _getOrderHandler;
 
-        public OrdersController(CreateOrderFromCartHandler createOrderFromCartHandler, GetOrderHandler getOrderHandler)
+        public OrdersController(CreateOrderHandler createOrderFromCartHandler, GetOrderHandler getOrderHandler)
         {
             _createOrderFromCartHandler = createOrderFromCartHandler;
             _getOrderHandler = getOrderHandler;
         }
 
         [HttpPut]
-        public async Task<ActionResult<OrderDto>> CreateOrderFromCartAsync(CancellationToken ct = default)
+        public async Task<ActionResult> CreateOrderFromCartAsync(CancellationToken ct = default)
         {
-            var result = await _createOrderFromCartHandler.CreateOrderAsync(ct);
+            var result = await _createOrderFromCartHandler.CreateOrderFromCartAsync(ct);
 
             if (result.IsFailed)
                 return BadRequest(result.Errors[0].Message);
-            if (result.Value is null)
-                return NotFound();
-
-            return Ok(result.Value);
+            
+            return Ok(new { OrderId = result.Value });
         }
 
         [HttpGet]

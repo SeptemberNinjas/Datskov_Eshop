@@ -32,7 +32,7 @@ namespace Eshop.Application.CartHandlers
                     else if (cartItem.Service is not null)
                         saleItem = (SaleItem)cartItem.Service;
                     else
-                        throw new("Не удалось получить торговую единицу");
+                        return Result.Fail("Не удалось получить торговую единицу");
 
                     cartItems.Add(new(saleItem, cartItem.Count, cartItem.Amount));
                 }

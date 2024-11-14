@@ -6,14 +6,14 @@ namespace Eshop.Menu.Commands
     internal class CreateOrderCommand : IMenuCommand
     {
         private readonly ApplicationContext _context;
-        private readonly CreateOrderFromCartHandler _createOrderFromCartHandler;
+        private readonly CreateOrderHandler _createOrderFromCartHandler;
         private readonly ClearCartHandler _clearCartHandler;
         private readonly ShowOrdersCommand _showOrdersCommand;
 
         public string Description { get; } = "Create order";
 
         public CreateOrderCommand(ApplicationContext context, 
-            CreateOrderFromCartHandler createOrderFromCartHandler,
+            CreateOrderHandler createOrderFromCartHandler,
             ClearCartHandler clearCartHandler,
             ShowOrdersCommand showOrdersCommand)
         {
@@ -27,7 +27,7 @@ namespace Eshop.Menu.Commands
 
         public async Task ExecuteAsync()
         {
-            var result = await _createOrderFromCartHandler.CreateOrderAsync();
+            var result = await _createOrderFromCartHandler.CreateOrderFromCartAsync();
             if (result.IsFailed) 
             {
                 _context.CurrentPage.InfoMessage = result.Errors[0].Message;

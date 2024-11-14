@@ -20,7 +20,7 @@ namespace Eshop.Menu
             foreach (var order in Orders)
             {
                 Console.WriteLine("Number: " + order.Number);
-                Console.WriteLine("Status: " + order.Status);
+                Console.WriteLine("Status: " + order.StatusRepresentation);
                 Console.WriteLine("Count:  " + order.Count);
                 Console.WriteLine("Amount: " + order.TotalAmount);
                 Console.WriteLine("----------------------------------------------------------");

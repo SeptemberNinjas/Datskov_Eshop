@@ -29,7 +29,7 @@ namespace Eshop.Application.CartHandlers
                 else if (saleItem is Service service)
                     cart.Add(service);
                 else
-                    throw new($"Ид {saleItemId} не найден!");
+                    return Result.Fail($"Ид {saleItemId} не найден!");
 
                 await cartRepository.SaveAsync(cart, ct);
 

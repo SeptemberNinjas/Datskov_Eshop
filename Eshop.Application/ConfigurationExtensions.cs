@@ -18,7 +18,7 @@ namespace Eshop.Application
                 .AddScoped<AddItemToCartHandler>()
                 .AddScoped<GetCartHandler>()
                 .AddScoped<ClearCartHandler>()
-                .AddScoped<CreateOrderFromCartHandler>()
+                .AddScoped<CreateOrderHandler>()
                 .AddScoped<GetOrderHandler>();
                 
             return services;
