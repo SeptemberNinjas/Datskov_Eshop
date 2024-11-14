@@ -1,4 +1,5 @@
 ﻿using Eshop.Application;
+using Eshop.Application.OrderHandlers;
 using Eshop.Core;
 using Eshop.DataAccess;
 using Eshop.Menu;
@@ -14,10 +15,11 @@ namespace Eshop
 
         internal ApplicationContext(IConfiguration appconfig)
         {
-            var services = new ServiceCollection();
-            services.RegisterApplicationDependencies(appconfig);
-            // регистрация зависимостей консольного пиложения
-            services.AddScoped<ApplicationContext>(x => this)
+            var services = new ServiceCollection()
+                .RegisterApplicationDependencies(appconfig)
+
+                // регистрация зависимостей консольного пиложения
+                .AddScoped<ApplicationContext>(x => this)
                 .AddScoped<IRepository<Product>>(x => x.GetRequiredService<RepositoryFactory>().ProductRepository())
                 .AddScoped<IRepository<Service>>(x => x.GetRequiredService<RepositoryFactory>().ServiceRepository())
                 .AddScoped<IRepository<Order>>(x => x.GetRequiredService<RepositoryFactory>().OrderRepository())

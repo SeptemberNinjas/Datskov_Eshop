@@ -27,7 +27,7 @@ namespace Eshop.Application.OrderHandlers
                     }
                     orderDtos.Add(new(order.Id, order.Status, orderItemDtos));
                 }
-                return Result.Ok((IReadOnlyCollection<OrderDto>)ordersDto);
+                return Result.Ok((IReadOnlyCollection<OrderDto>)orderDtos);
             }
             catch (Exception ex)
             {
