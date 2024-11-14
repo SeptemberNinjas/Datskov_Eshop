@@ -1,25 +1,23 @@
 ﻿using Eshop.Core;
-using Eshop.DataAccess;
 using FluentResults;
 
 namespace Eshop.Application.SaleItemHandlers
 {
     public class GetSaleItemHandler
     {
-        private readonly RepositoryFactory _repositoryFactory;
+        private readonly IRepository<SaleItem> _saleItemRepository;
 
-        public GetSaleItemHandler(RepositoryFactory repositoryFactory)
+        public GetSaleItemHandler(IRepository<SaleItem> saleItemRepository)
         {
-            _repositoryFactory = repositoryFactory;
+            _saleItemRepository = saleItemRepository;
         }
 
         public async Task<Result<IEnumerable<SaleItemDto>>> GetAllAsync(SaleItemType itemType, CancellationToken ct = default)
         {
-            var repository = _repositoryFactory.SaleItemRepository();
-
             try
             {
-                var requestedItems = (await repository
+                var requestedItems = (await _saleItemRepository
+
                     .GetAllAsync(ct))
                     .Where(i => i.Type == itemType);
 
@@ -36,10 +34,9 @@ namespace Eshop.Application.SaleItemHandlers
 
         public async Task<Result<SaleItemDto>> GetByIdAsync(int id, CancellationToken ct = default)
         {
-            var repository = _repositoryFactory.SaleItemRepository();
             try
             {
-                var requestedItem = await repository.GetByIdAsync(id, ct);
+                var requestedItem = await _saleItemRepository.GetByIdAsync(id, ct);
                 if (requestedItem != null)
                     return Result.Ok(new SaleItemDto(requestedItem.Type, requestedItem.Id, requestedItem.Name, requestedItem.Description, requestedItem.Price, (requestedItem as Product)?.Stock));
                 else

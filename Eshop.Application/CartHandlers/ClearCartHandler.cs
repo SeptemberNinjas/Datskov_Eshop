@@ -1,22 +1,21 @@
-﻿using Eshop.DataAccess;
+﻿using Eshop.Core;
 using FluentResults;
 
 namespace Eshop.Application.CartHandlers
 {
     public class ClearCartHandler
     {
-        private readonly RepositoryFactory _repositoryFactory;
-        public ClearCartHandler(RepositoryFactory repositoryFactory)
+        private readonly IRepository<Cart> _cartRepository;
+        public ClearCartHandler(IRepository<Cart> cartRepository)
         {
-            _repositoryFactory = repositoryFactory;
+            _cartRepository = cartRepository;
         }
 
         public async Task<Result> ClearCartAsync(CancellationToken ct = default)
         {
             try
             {
-                var cartRepository = _repositoryFactory.CartRepository();
-                await cartRepository.SaveAsync(new(), ct);
+                await _cartRepository.SaveAsync(new(), ct);
 
                 return Result.Ok();
             }

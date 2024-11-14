@@ -6,20 +6,17 @@ namespace Eshop.Application.CartHandlers
 {
     public class GetCartHandler
     {
-        private readonly RepositoryFactory _repositoryFactory;
-
-        public GetCartHandler(RepositoryFactory repositoryFactory)
+        private readonly IRepository<Cart> _cartRepository;
+        public GetCartHandler(IRepository<Cart> cartRepository)
         {
-            _repositoryFactory = repositoryFactory;
+            _cartRepository = cartRepository;
         }
 
         public async Task<Result<CartDto>> GetAsync(CancellationToken ct = default)
         {
-            var repository = _repositoryFactory.CartRepository();
-
             try
             {
-                var carts = await repository.GetAllAsync(ct);
+                var carts = await _cartRepository.GetAllAsync(ct);
                 var cart = carts.FirstOrDefault() ?? new Cart();
 
                 var cartItems = new List<CartItemDto>();

@@ -1,15 +1,15 @@
-﻿using Eshop.DataAccess;
+﻿using Eshop.Core;
 using FluentResults;
 
 namespace Eshop.Application.OrderHandlers
 {
     public class GetOrderHandler
     {
-        private readonly RepositoryFactory _repositoryFactory;
+        private readonly IRepository<Order> _orderRepository;
 
-        public GetOrderHandler(RepositoryFactory repositoryFactory)
+        public GetOrderHandler(IRepository<Order> orderRepository)
         {
-            _repositoryFactory = repositoryFactory;
+            _orderRepository = orderRepository;
         }
 
         public async Task<Result<IReadOnlyCollection<OrderDto>>> GetAllAsync(CancellationToken ct = default)
@@ -18,7 +18,7 @@ namespace Eshop.Application.OrderHandlers
             {
                 var orderDtos = new List<OrderDto>();
 
-                var orders = await _repositoryFactory.OrderRepository().GetAllAsync(ct);
+                var orders = await _orderRepository.GetAllAsync(ct);
 
                 foreach (var order in orders) {
                     var orderItemDtos = new List<OrderItemDto>();

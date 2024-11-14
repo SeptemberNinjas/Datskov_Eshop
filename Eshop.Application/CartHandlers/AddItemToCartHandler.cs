@@ -1,28 +1,27 @@
 ﻿using Eshop.Core;
-using Eshop.DataAccess;
 using FluentResults;
 
 namespace Eshop.Application.CartHandlers
 {
     public class AddItemToCartHandler
     {
-        private readonly RepositoryFactory _repositoryFactory;
-        public AddItemToCartHandler(RepositoryFactory repositoryFactory)
+        private readonly IRepository<Cart> _cartRepository;
+        private readonly IRepository<SaleItem> _saleItemRepository;
+
+        public AddItemToCartHandler(IRepository<Cart> cartRepository, IRepository<SaleItem> saleItemRepository)
         {
-            _repositoryFactory = repositoryFactory;
+            _saleItemRepository = saleItemRepository;
+            _cartRepository = cartRepository;
         }
 
         public async Task<Result> AddToCartAsync(int saleItemId, uint count = default, CancellationToken ct = default)
         {
             try
             {
-                var cartRepository = _repositoryFactory.CartRepository();
-                var saleItemRepository = _repositoryFactory.SaleItemRepository();
-
-                var carts = await cartRepository.GetAllAsync(ct);
+                var carts = await _cartRepository.GetAllAsync(ct);
                 var cart = carts.FirstOrDefault() ?? new Cart();
 
-                var saleItem = await saleItemRepository.GetByIdAsync(saleItemId, ct);
+                var saleItem = await _saleItemRepository.GetByIdAsync(saleItemId, ct);
 
                 if (saleItem is Product product)
                     cart.Add(product, count);
@@ -31,7 +30,7 @@ namespace Eshop.Application.CartHandlers
                 else
                     return Result.Fail($"Ид {saleItemId} не найден!");
 
-                await cartRepository.SaveAsync(cart, ct);
+                await _cartRepository.SaveAsync(cart, ct);
 
                 return Result.Ok();
             }

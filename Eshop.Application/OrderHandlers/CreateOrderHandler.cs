@@ -1,23 +1,24 @@
 ﻿using Eshop.Core;
-using Eshop.DataAccess;
 using FluentResults;
 
 namespace Eshop.Application.OrderHandlers
 {
     public class CreateOrderHandler
     {
-        private readonly RepositoryFactory _repositoryFactory;
+        private readonly IRepository<Cart> _cartRepository;
+        private readonly IRepository<Order> _orderRepository;
 
-        public CreateOrderHandler(RepositoryFactory repositoryFactory)
+        public CreateOrderHandler(IRepository<Cart> cartRepository, IRepository<Order> orderRepository)
         {
-            _repositoryFactory = repositoryFactory;
+            _cartRepository = cartRepository;
+            _orderRepository = orderRepository;
         }
 
         public async Task<Result<int>> CreateOrderFromCartAsync(CancellationToken ct = default)
         {
             try
             {
-                var carts = await _repositoryFactory.CartRepository().GetAllAsync(ct);
+                var carts = await _cartRepository.GetAllAsync(ct);
                 var cart = carts.FirstOrDefault() ?? new();
 
                 if (cart.Items.Count == 0)
@@ -39,7 +40,7 @@ namespace Eshop.Application.OrderHandlers
                     }
                 }
 
-                await _repositoryFactory.OrderRepository().SaveAsync(order, ct);
+                await _orderRepository.SaveAsync(order, ct);
                 return Result.Ok(order.Id);
             }
             catch (Exception ex)
@@ -52,7 +53,7 @@ namespace Eshop.Application.OrderHandlers
         {
             try
             {
-                var orders = await _repositoryFactory.OrderRepository().GetAllAsync(ct);
+                var orders = await _orderRepository.GetAllAsync(ct);
                 var last = orders.MaxBy(x => x.Id)?.Id ?? 0;
 
                 return Result.Ok(++last);
