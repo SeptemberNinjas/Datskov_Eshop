@@ -4,9 +4,10 @@ namespace Eshop.DataAccess
 {
     public abstract class RepositoryFactory
     {
-        public abstract IRepository<Product> ProductManager();
-        public abstract IRepository<Service> ServiceManager();
-        public abstract IRepository<Order> OrderManager();
-        public abstract IRepository<Cart> CartManager();
+        public abstract IRepository<Product> ProductRepository();
+        public abstract IRepository<Service> ServiceRepository();
+        public abstract IRepository<Order> OrderRepository();
+        public abstract IRepository<Cart> CartRepository();
+        public abstract IRepository<SaleItem> SaleItemRepository();
     }
 }

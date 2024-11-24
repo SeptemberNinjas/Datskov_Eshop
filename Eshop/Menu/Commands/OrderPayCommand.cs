@@ -34,8 +34,8 @@ namespace Eshop.Menu.Commands
             {
                 order.Status = OrderStatuses.Paid;
                 await orderRepository.SaveAsync(order);
-                if (currentPage is OrdersPage ordPage)
-                    ordPage.Orders = [.. await orderRepository.GetAllAsync()];
+                //if (currentPage is OrdersPage ordPage)
+                //    ordPage.Orders = [.. await orderRepository.GetAllAsync()];
             }
             currentPage.InfoMessage = result.ResultDescription;
         }

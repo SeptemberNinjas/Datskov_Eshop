@@ -9,6 +9,20 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eshop.Core", "Core\Eshop.Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eshop.DataAccess", "Eshop.DataAccess\Eshop.DataAccess.csproj", "{C7635267-F8BE-400B-BD74-4574D536131C}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eshop.Application", "Eshop.Application\Eshop.Application.csproj", "{D31241E6-8A05-4F34-87B6-0049D5BF6408}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решения", "Элементы решения", "{8E5A257E-E3BC-4E08-BCF8-B0D3C7CC54F6}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "init-scripts", "init-scripts", "{D91A9588-BCED-4DF8-BBEE-F71C4AC8AA12}"
+	ProjectSection(SolutionItems) = preProject
+		init-scripts\init.sql = init-scripts\init.sql
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eshop.WebApp", "Eshop.WebApp\Eshop.WebApp.csproj", "{8F543454-C879-4339-9505-A4019A674843}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,9 +41,20 @@ Global
 		{C7635267-F8BE-400B-BD74-4574D536131C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C7635267-F8BE-400B-BD74-4574D536131C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C7635267-F8BE-400B-BD74-4574D536131C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D31241E6-8A05-4F34-87B6-0049D5BF6408}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D31241E6-8A05-4F34-87B6-0049D5BF6408}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D31241E6-8A05-4F34-87B6-0049D5BF6408}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D31241E6-8A05-4F34-87B6-0049D5BF6408}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F543454-C879-4339-9505-A4019A674843}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F543454-C879-4339-9505-A4019A674843}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F543454-C879-4339-9505-A4019A674843}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F543454-C879-4339-9505-A4019A674843}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D91A9588-BCED-4DF8-BBEE-F71C4AC8AA12} = {8E5A257E-E3BC-4E08-BCF8-B0D3C7CC54F6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8D418EAA-34DC-4A79-A096-85F7A2E199E0}

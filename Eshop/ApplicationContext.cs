@@ -1,6 +1,7 @@
-﻿using Eshop.Core;
+﻿using Eshop.Application;
+using Eshop.Application.OrderHandlers;
+using Eshop.Core;
 using Eshop.DataAccess;
-using Eshop.DataAccess.PGDataStorage;
 using Eshop.Menu;
 using Eshop.Menu.Commands;
 using Microsoft.Extensions.Configuration;
@@ -15,12 +16,9 @@ namespace Eshop
         internal ApplicationContext(IConfiguration appconfig)
         {
             var services = new ServiceCollection()
-                .AddSingleton<RepositoryFactory>(x => new PGDataStorageFactory(appconfig["dbConnectionString"] ?? ""))
-                .AddScoped<IRepository<Product>>(x => x.GetRequiredService<RepositoryFactory>().ProductManager())
-                .AddScoped<IRepository<Service>>(x => x.GetRequiredService<RepositoryFactory>().ServiceManager())
-                .AddScoped<IRepository<Order>>(x => x.GetRequiredService<RepositoryFactory>().OrderManager())
-                .AddScoped<IRepository<Cart>>(x => x.GetRequiredService<RepositoryFactory>().CartManager())
-                .AddScoped<Cart>(x => x.GetRequiredService<RepositoryFactory>().CartManager().GetAllAsync().Result.FirstOrDefault() ?? new Cart())
+                .RegisterApplicationDependencies(appconfig)
+
+                // регистрация зависимостей консольного пиложения
                 .AddScoped<ApplicationContext>(x => this)
                 .AddScoped<AddToCartCommand>()
                 .AddScoped<BackCommand>()
@@ -34,14 +32,11 @@ namespace Eshop
                 .AddScoped<ShowCatalogCommand<Product>>()
                 .AddScoped<ShowCatalogCommand<Service>>()
                 .AddScoped<ShowOrdersCommand>()
-                .AddScoped<OrderPayCommand>()
                 ;
+            
 
             ServiceProvider = services.BuildServiceProvider().CreateScope().ServiceProvider;
             MenuPage.ServiceProvider = ServiceProvider;
-
-            var cart = ServiceProvider.GetRequiredService<Cart>();
-            cart.CartChangeNotyfy += UpdateCartCache;
 
             var mainMenuCommands = new Dictionary<int, IMenuCommand>()
             {
@@ -55,18 +50,5 @@ namespace Eshop
         internal Stack<MenuPage> OpenPages = new();
 
         internal MenuPage CurrentPage { get => OpenPages.Peek(); set => OpenPages.Push(value); }
-
-        public int GetNewOrderNumber()
-        {
-            var lastId = ServiceProvider.GetRequiredService<IRepository<Order>>().GetAllAsync().Result.MaxBy(x => x.Id)?.Id ?? 0;
-            return ++lastId;
-        }
-
-        internal async void UpdateCartCache()
-        {
-            var cart = ServiceProvider.GetRequiredService<Cart>();
-            if (cart != null)
-                await ServiceProvider.GetRequiredService<IRepository<Cart>>().SaveAsync(cart);
-        }
     }
 }

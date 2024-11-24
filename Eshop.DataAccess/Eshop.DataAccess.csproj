@@ -11,19 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="JSONDataStorage\data\Products.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="JSONDataStorage\data\Services.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="JSONDataStorage\data\Orders\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Npgsql" Version="8.0.5" />
   </ItemGroup>
 

@@ -2,9 +2,9 @@
 using System.Data;
 using System.Text;
 
-namespace Eshop.DataAccess.PGDataStorage
+namespace Eshop.DataAccess.DatabaseStorage
 {
-    public class CartPGDataStorage(string connectionString, 
+    public class CartDatebaseStorage(string connectionString, 
         IRepository<Product> ProductManager, 
         IRepository<Service> ServiceManager) : DBContext(connectionString), IRepository<Cart>
     {

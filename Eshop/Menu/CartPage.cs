@@ -1,4 +1,4 @@
-﻿using Eshop.Core;
+﻿using Eshop.Application.CartHandlers;
 using Eshop.Menu.Commands;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -6,6 +6,7 @@ namespace Eshop.Menu
 {
     internal class CartPage : MenuPage
     {
+        public CartDto CartDto { get; set; } = new([]);
         public CartPage(Dictionary<int, IMenuCommand> commands) : base(commands)
         {
             commands.Clear();
@@ -16,23 +17,20 @@ namespace Eshop.Menu
         }
         public override void DrawPage()
         {
-            var cart = ServiceProvider.GetRequiredService<Cart>();
-
             Console.WriteLine("--// Cart // --");
             Console.WriteLine("----------------------------------------------------------");
 
-            foreach (CartItem cartItem in cart.Items)
+            foreach (var cartItem in CartDto.Items)
             {
-                var name = cartItem.Product?.Name ?? cartItem.Service?.Name;
-                Console.WriteLine("Name:   " + name);
+                Console.WriteLine("Name:   " + cartItem.SaleItem.Name);
                 Console.WriteLine("Price:  " + cartItem.Price);
                 Console.WriteLine("Count:  " + cartItem.Count);
                 Console.WriteLine("Amount: " + cartItem.Amount);
                 Console.WriteLine("----------------------------------------------------------");
             }
             Console.WriteLine();
-            Console.WriteLine("{0} positions", cart.Count);
-            Console.WriteLine("Total amount : {0} RUB", cart.TotalAmount);
+            Console.WriteLine("{0} positions", CartDto.Count);
+            Console.WriteLine("Total amount : {0} RUB", CartDto.TotalAmount);
             Console.WriteLine();
 
             DrawCommandInterface();
